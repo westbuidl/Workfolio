@@ -257,13 +257,13 @@ const Dashboard: React.FC = () => {
     { id: 'analytics', label: 'Analytics' }
   ];
 
-  const navItems: NavItem[] = [
-    { title: 'ABOUT', href: '../#about' },
-    { title: 'HOW IT WORKS', href: '../#how-it-works' },
-    { title: 'BENEFITS', href: '../#benefits' },
-    { title: 'ROADMAP', href: '../#roadmap' },
-    { title: 'MARKETPLACE', href: '../#marketplace' },
-    { title: 'FAQ', href: 'faq' }
+  const navItems = [
+    { title: 'DASHBOARD', href: '../dashboard' },
+    { title: 'INBOX', href: '../inbox' },
+    { title: 'PROFILE', href: '../profile' },
+    { title: 'MARKETPLACE', href: '/' },
+    { title: 'SOLEER HOME', href: '#' },
+    { title: 'FAQ', href: '../faq' },
   ];
 
   useEffect(() => {

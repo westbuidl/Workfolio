@@ -4,32 +4,31 @@ import { z } from 'zod';
 
 const prisma = new PrismaClient();
 
-// Define response types
-interface SuccessResponse {
-  isVerified: boolean;
-  email?: string;
-  userData?: UserData | null;
-  message?: string;
-}
-
+// Update UserData to match Prisma schema exactly
 interface UserData {
   id: string;
-  email: string | null;
-  emailVerified: boolean;
-  walletAddress: string | null;
   name: string | null;
+  email: string | null;
+  profileImage: string | null;
+  bannerImage: string | null;
+  verificationCode: string | null;
+  isEmailVerified: boolean;
   username: string | null;
+  walletAddress: string | null;
   bio: string | null;
   website: string | null;
   twitter: string | null;
   linkedin: string | null;
   discord: string | null;
-  jobTitle: string | null;
-  skills: string[] | null;
-  jobDescription: string | null;
-  portfolio: string | null;
-  profileImageUrl: string | null;
-  bannerImageUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface SuccessResponse {
+  isVerified: boolean;
+  email?: string | null;
+  userData?: UserData | null;
+  message?: string;
 }
 
 interface ErrorResponse {
@@ -95,7 +94,7 @@ export default async function handler(
         where: { walletAddress: wallet }
       });
 
-      if (user?.emailVerified) {
+      if (user?.isEmailVerified) {  // Updated to match schema
         return res.status(200).json({
           isVerified: true,
           email: user.email,
@@ -114,7 +113,7 @@ export default async function handler(
         where: {
           email: email,
           walletAddress: wallet,
-          emailVerified: true
+          isEmailVerified: true  // Updated to match schema
         }
       });
 
@@ -135,7 +134,7 @@ export default async function handler(
       const user = await prisma.user.findFirst({
         where: {
           email: email,
-          emailVerified: true
+          isEmailVerified: true  // Updated to match schema
         }
       });
 

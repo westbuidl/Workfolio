@@ -16,13 +16,12 @@ const FAQSection: React.FC = () => {
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   const navItems = [
-    { title: 'ABOUT', href: '../#about' },
-    { title: 'HOW IT WORKS', href: '../#how-it-works' },
-    { title: 'WHY SOLEER', href: '../#why-soleer' },
-    { title: 'GOVERNANCE', href: '../#governance' },
-    { title: 'ROADMAP', href: '../#roadmap' },
-    { title: 'FAQ', href: 'faq' },
-    { title: 'MARKETPLACE EXPERIENCE', href: '../#marketplace' }
+    { title: 'DASHBOARD', href: '../dashboard' },
+    { title: 'INBOX', href: '../inbox' },
+    { title: 'PROFILE', href: '../profile' },
+    { title: 'MARKETPLACE', href: '/' },
+    { title: 'SOLEER HOME', href: '#' },
+    { title: 'FAQ', href: '../faq' },
   ];
 
   // Typing effect

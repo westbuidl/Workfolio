@@ -38,13 +38,12 @@ const QualityGuide: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const navItems = [
-    { title: 'ABOUT', href: '../#about' },
-    { title: 'HOW IT WORKS', href: '../#how-it-works' },
-    { title: 'WHY SOLEER', href: '../#why-soleer' },
-    { title: 'GOVERNANCE', href: '../#governance' },
-    { title: 'ROADMAP', href: '../#roadmap' },
-    { title: 'FAQ', href: 'faq' },
-    { title: 'MARKETPLACE EXPERIENCE', href: '../#marketplace' }
+    { title: 'DASHBOARD', href: '../dashboard' },
+    { title: 'INBOX', href: '../inbox' },
+    { title: 'PROFILE', href: '../profile' },
+    { title: 'MARKETPLACE', href: '/' },
+    { title: 'SOLEER HOME', href: '#' },
+    { title: 'FAQ', href: '../faq' },
   ];
 
 
