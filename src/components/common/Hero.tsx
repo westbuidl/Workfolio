@@ -50,11 +50,11 @@ const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen,
   if (!isOpen || !freelancer) return null;
 
   return (
-    
+
     <div className="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center">
       <div className="bg-[#1A1B1E] rounded-lg w-full max-w-md relative">
         {/* Close button */}
-        <button 
+        <button
           onClick={onClose}
           className="absolute right-4 top-4 text-gray-400 hover:text-white"
         >
@@ -63,11 +63,11 @@ const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen,
 
         <div className="p-6">
           <h2 className="text-2xl font-bold text-white mb-2">Profile</h2>
-          
+
           <div className="flex items-center space-x-4 mb-6">
-            <img 
-              src={freelancer.avatar} 
-              alt={freelancer.name} 
+            <img
+              src={freelancer.avatar}
+              alt={freelancer.name}
               className="w-12 h-12 rounded-full"
             />
             <div>
@@ -92,9 +92,9 @@ const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen,
           </div>
 
           <h3 className="text-white text-xl font-bold mb-4">UI/UX DESIGNER</h3>
-          
+
           <p className="text-gray-400 mb-6">
-            Thousands of sponsorship jobs are advertised daily. If you haven't landed one, 
+            Thousands of sponsorship jobs are advertised daily. If you haven't landed one,
             you're not looking in the right place.
           </p>
 
@@ -102,8 +102,8 @@ const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen,
             <h4 className="text-white font-bold mb-3">Skills</h4>
             <div className="flex flex-wrap gap-2">
               {freelancer.skills?.map((skill) => (
-                <span 
-                  key={skill} 
+                <span
+                  key={skill}
                   className="bg-[#26272B] text-white px-4 py-1 rounded-full text-sm"
                 >
                   {skill}
@@ -115,14 +115,14 @@ const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen,
           <div className="space-y-4">
             <div>
               <h4 className="text-white font-bold mb-2">Portfolio</h4>
-              <a 
-                href="#" 
+              <a
+                href="#"
                 className="inline-flex items-center space-x-2 text-gray-400 hover:text-white"
               >
                 <span>Website</span>
               </a>
             </div>
-            
+
             <div>
               <h4 className="text-white font-bold mb-2">Socials</h4>
               <div className="flex space-x-3">
@@ -147,30 +147,69 @@ const WalletConnectionModal: React.FC<{ isOpen: boolean; onClose: () => void }> 
     }
   }, [connected, onClose]);
 
+  const handleClose = () => {
+    window.location.href = '/'; // Use window.location for navigation
+  };
+
   if (!isOpen) return null;
 
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-[70] flex items-center justify-center">
-      <div className="bg-[#1A1B1E] rounded-lg p-6 w-full max-w-md relative">
-        <button 
-          onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-white"
+    <div className="fixed inset-0 bg-black bg-opacity-70 z-[70] flex items-center justify-center backdrop-blur-sm">
+      <div className="bg-gradient-to-br from-[#1A1B1E] to-[#26272B] rounded-2xl p-8 w-full max-w-md relative border border-[#8B5CF6]/20 shadow-xl">
+        {/* Close button with gradient hover effect */}
+        <button
+          onClick={handleClose}
+          className="absolute right-4 top-4 p-2 rounded-full transition-all duration-200 bg-gradient-to-r hover:from-[#8B5CF6] hover:to-[#7C3AED] group"
         >
-          <X size={24} />
+          <X size={24} className="text-gray-400 group-hover:text-white" />
         </button>
-        
-        <h2 className="text-2xl font-bold text-white mb-6">Connect Wallet</h2>
-        <div className="flex justify-center">
-          <WalletMultiButton />
+
+        {/* Header with gradient text */}
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-transparent bg-clip-text">
+            Connect Wallet
+          </h2>
+          <p className="text-gray-400">
+            Join the decentralized marketplace
+          </p>
         </div>
-        <p className="text-gray-400 text-center mt-4">
-          Connect your wallet to access the marketplace
-        </p>
+
+        {/* Wallet connection section */}
+        <div className="bg-[#0D0D0D] p-6 rounded-xl mb-6 border border-[#8B5CF6]/10">
+          <div className="flex justify-center mb-4">
+            <img src="/images/sol-logo.png" alt="Solana" className="w-12 h-12" />
+          </div>
+          <div className="flex justify-center">
+            <WalletMultiButton className="!bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6B2CF5] !transition-all !duration-200 !rounded-xl !px-8 !py-3" />
+          </div>
+        </div>
+
+        {/* Features list */}
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3 text-gray-400">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <span>Access to exclusive gigs</span>
+          </div>
+          <div className="flex items-center space-x-3 text-gray-400">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <span>Secure blockchain payments</span>
+          </div>
+          <div className="flex items-center space-x-3 text-gray-400">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
+              <span className="text-white text-sm">✓</span>
+            </div>
+            <span>Decentralized escrow system</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
 
 
 
@@ -192,9 +231,9 @@ const StarIcon: React.FC = () => (
 const JobCard: React.FC<JobCardProps> = ({ job, onProfileClick }) => (
   <div className="bg-[#1A1B1E] rounded-lg overflow-hidden border border-[#26272B]">
     <div className="relative h-[200px]">
-      <img 
-        src={job.image} 
-        alt={job.title} 
+      <img
+        src={job.image}
+        alt={job.title}
         className="w-full h-full object-cover"
       />
       <button className="absolute top-3 right-3 p-1.5 bg-[#26272B] rounded">
@@ -202,13 +241,13 @@ const JobCard: React.FC<JobCardProps> = ({ job, onProfileClick }) => (
       </button>
     </div>
     <div className="p-4">
-      <div 
+      <div
         className="flex items-center space-x-2 mb-2 cursor-pointer"
         onClick={() => onProfileClick(job.freelancer)}
       >
-        <img 
-          src={job.freelancer.avatar} 
-          alt={job.freelancer.name} 
+        <img
+          src={job.freelancer.avatar}
+          alt={job.freelancer.name}
           className="w-6 h-6 rounded-full"
         />
         <span className="text-white text-sm">{job.freelancer.name}</span>
@@ -258,14 +297,13 @@ const Hero: React.FC = () => {
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(true);
   const { connected } = useWallet();
 
-
   useEffect(() => {
     if (!connected) {
       setIsWalletModalOpen(true);
     }
   }, [connected]);
 
-    
+
   const navItems = [
     { title: 'DASHBOARD', href: '../profile' },
     { title: 'INBOX', href: '../inbox' },
@@ -273,8 +311,8 @@ const Hero: React.FC = () => {
     { title: 'SOLEER HOME', href: 'soleer.xyz' },
     { title: 'FAQ', href: 'faq' },
   ];
-  
-  
+
+
   const jobs = [
     {
       id: '1',
@@ -401,12 +439,12 @@ const Hero: React.FC = () => {
   const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
 
   const handleProfileClick = (freelancer: Freelancer): void => {
-    setSelectedFreelancer(() => freelancer); // Fixed TypeScript error by using callback form
+    setSelectedFreelancer(() => freelancer);
   };
 
   const filteredJobs = useCallback(() => {
     if (!searchQuery.trim()) return jobs;
-    
+
     const searchTerms = searchQuery.toLowerCase().split(' ');
     return jobs.filter(job => {
       const searchableText = `${job.title} ${job.description} ${job.freelancer.name}`.toLowerCase();
@@ -419,101 +457,104 @@ const Hero: React.FC = () => {
     currentPage * ITEMS_PER_PAGE
   );
 
-  
 
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] z-80">
-      <Navbar 
+      <Navbar
         navItems={navItems}
         title="Soleer Marketplace"
         description="Find and hire top freelancers on the blockchain"
       />
-      
-      {/* Wallet Connection Modal */}
-      <WalletConnectionModal 
-        isOpen={isWalletModalOpen} 
-        onClose={() => setIsWalletModalOpen(false)} 
+
+      {/* Enhanced Wallet Connection Modal */}
+      <WalletConnectionModal
+        isOpen={isWalletModalOpen}
+        onClose={() => setIsWalletModalOpen(false)}
       />
 
       {/* Only show main content if wallet is connected */}
       {connected ? (
         <main className="container mx-auto px-4 pt-20">
 
-        {/* Added z-10 to ensure search bar doesn't block navbar dropdown */}
-        <div className="relaive mb-6 z-05">
-          <input
-            type="text"
-            placeholder="Search for jobs to hire"
-            className="w-full bg-[#1A1B1E] p-3 pl-10 rounded-lg text-white placeholder-gray-400"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-            <SearchIcon />
-          </div>
-        </div>
-
-        {/* Added z-10 to ensure filters don't block navbar dropdown */}
-        <div className="flex space-x-6 mb-6 z-10 relative">
-          <button
-            className={`flex items-center space-x-2 px-4 py-2 rounded ${
-              activeTab === 'trending' ? 'text-[#8B5CF6]' : 'text-gray-400'
-            }`}
-            onClick={() => setActiveTab('trending')}
-          >
-            <span className="text-lg">⚡</span>
-            <span>Trending</span>
-          </button>
-          <button
-            className={`flex items-center space-x-2 px-4 py-2 rounded ${
-              activeTab === 'popular' ? 'text-[#8B5CF6]' : 'text-gray-400'
-            }`}
-            onClick={() => setActiveTab('popular')}
-          >
-            <span className="text-lg">⭐</span>
-            <span>Popular</span>
-          </button>
-        </div>
-
-        {/* Added z-0 to ensure grid stays below navbar dropdown */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 relative z-0">
-          {paginatedJobs.map(job => (
-            <JobCard 
-              key={job.id}
-              job={job}
-              onProfileClick={handleProfileClick}
+          {/* Added z-10 to ensure search bar doesn't block navbar dropdown */}
+          <div className="relaive mb-6 z-05">
+            <input
+              type="text"
+              placeholder="Search for jobs to hire"
+              className="w-full bg-[#1A1B1E] p-3 pl-10 rounded-lg text-white placeholder-gray-400"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
-          ))}
-        </div>
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <SearchIcon />
+            </div>
+          </div>
 
-        {totalPages > 1 && (
-          <div className="flex justify-center mt-8 space-x-2">
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`px-4 py-2 rounded ${
-                  currentPage === i + 1
-                    ? 'bg-[#8B5CF6] text-white'
-                    : 'bg-[#1A1B1E] text-gray-400 hover:bg-[#26272B]'
+          {/* Added z-10 to ensure filters don't block navbar dropdown */}
+          <div className="flex space-x-6 mb-6 z-10 relative">
+            <button
+              className={`flex items-center space-x-2 px-4 py-2 rounded ${activeTab === 'trending' ? 'text-[#8B5CF6]' : 'text-gray-400'
                 }`}
-              >
-                {i + 1}
-              </button>
+              onClick={() => setActiveTab('trending')}
+            >
+              <span className="text-lg">⚡</span>
+              <span>Trending</span>
+            </button>
+            <button
+              className={`flex items-center space-x-2 px-4 py-2 rounded ${activeTab === 'popular' ? 'text-[#8B5CF6]' : 'text-gray-400'
+                }`}
+              onClick={() => setActiveTab('popular')}
+            >
+              <span className="text-lg">⭐</span>
+              <span>Popular</span>
+            </button>
+          </div>
+
+          {/* Added z-0 to ensure grid stays below navbar dropdown */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 relative z-0">
+            {paginatedJobs.map(job => (
+              <JobCard
+                key={job.id}
+                job={job}
+                onProfileClick={handleProfileClick}
+              />
             ))}
           </div>
-        )}
- </main>
+
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-4 py-2 rounded ${currentPage === i + 1
+                      ? 'bg-[#8B5CF6] text-white'
+                      : 'bg-[#1A1B1E] text-gray-400 hover:bg-[#26272B]'
+                    }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </main>
       ) : (
         <div className="container mx-auto px-4 pt-20 text-center">
-          <p className="text-white text-xl">Please connect your wallet to access the marketplace</p>
-          <div className="mt-4">
-            <WalletMultiButton />
+          <div className="max-w-2xl mx-auto">
+            <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-transparent bg-clip-text">
+              Welcome to Soleer Marketplace
+            </h1>
+            <p className="text-gray-400 text-xl mb-8">
+              Connect your wallet to access the decentralized freelance marketplace
+            </p>
+            <div className="flex justify-center">
+              <WalletMultiButton className="!bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6B2CF5] !transition-all !duration-200 !rounded-xl !px-8 !py-3" />
+            </div>
           </div>
         </div>
       )}
-      <FreelancerProfileModal 
+      <FreelancerProfileModal
         isOpen={!!selectedFreelancer}
         onClose={() => setSelectedFreelancer(null)}
         freelancer={selectedFreelancer}
