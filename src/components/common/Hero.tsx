@@ -1,273 +1,527 @@
 "use client";
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React, { useState, useCallback, useEffect } from 'react';
+import { X } from 'lucide-react';
+import Footer from "@/components/sections/Footer";
 import Navbar from './Navbar';
-import Head from 'next/head';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
-import { PhantomWalletAdapter, SolflareWalletAdapter } from '@solana/wallet-adapter-wallets';
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
+import "@/app/globals.css";
+import {
+  ConnectionProvider,
+  WalletProvider,
+  useWallet,
+  useConnection,
+} from '@solana/wallet-adapter-react';
+import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
+import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
 require('@solana/wallet-adapter-react-ui/styles.css');
 
+interface Freelancer {
+  name: string;
+  avatar: string;
+  skills?: string[];
+}
 
-const TypeWriter: React.FC<{ texts: string[]; delay?: number; isVisible: boolean }> = ({ texts, delay = 50, isVisible }) => {
-  const [displayText, setDisplayText] = useState('');
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [isTyping, setIsTyping] = useState(true);
-  
-  useEffect(() => {
-    if (!isVisible) {
-      setDisplayText('');
-      return;
-    }
 
-    let timer: NodeJS.Timeout;
+
+interface Job {
+  id: string;
+  image: string;
+  title: string;
+  description: string;
+  price: number;
+  freelancer: Freelancer;
+}
+
+interface FreelancerProfileModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  freelancer: Freelancer | null;
+}
+
+interface JobCardProps {
+  job: Job;
+  onProfileClick: (freelancer: Freelancer) => void;
+}
+
+
+
+
+const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen, onClose, freelancer }) => {
+  if (!isOpen || !freelancer) return null;
+
+  return (
     
-    if (isTyping) {
-      // Typing forward
-      const currentText = texts[currentTextIndex];
-      if (displayText.length < currentText.length) {
-        timer = setTimeout(() => {
-          setDisplayText(currentText.slice(0, displayText.length + 1));
-        }, delay);
-      } else {
-        // Wait a bit before starting to delete
-        timer = setTimeout(() => {
-          setIsTyping(false);
-        }, 2000);
-      }
-    } else {
-      // Typing backward
-      if (displayText.length > 0) {
-        timer = setTimeout(() => {
-          setDisplayText(displayText.slice(0, -1));
-        }, delay / 2);
-      } else {
-        // Move to next text
-        setCurrentTextIndex((prev) => (prev + 1) % texts.length);
-        setIsTyping(true);
-      }
-    }
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-[60] flex items-center justify-center">
+      <div className="bg-[#1A1B1E] rounded-lg w-full max-w-md relative">
+        {/* Close button */}
+        <button 
+          onClick={onClose}
+          className="absolute right-4 top-4 text-gray-400 hover:text-white"
+        >
+          <X size={24} />
+        </button>
 
-    return () => clearTimeout(timer);
-  }, [texts, delay, isVisible, displayText, currentTextIndex, isTyping]);
+        <div className="p-6">
+          <h2 className="text-2xl font-bold text-white mb-2">Profile</h2>
+          
+          <div className="flex items-center space-x-4 mb-6">
+            <img 
+              src={freelancer.avatar} 
+              alt={freelancer.name} 
+              className="w-12 h-12 rounded-full"
+            />
+            <div>
+              <h3 className="text-white font-bold">{freelancer.name}</h3>
+              <div className="flex text-yellow-400">
+                {'★'.repeat(5)}
+              </div>
+            </div>
+          </div>
 
-  return <span>{displayText}<span className="animate-blink">|</span></span>;
+          <div className="flex items-center justify-between mb-6">
+            <button className="bg-[#8B5CF6] text-white px-6 py-2 rounded-lg hover:bg-[#7C3AED]">
+              HIRE
+            </button>
+            <div className="flex items-center space-x-4">
+              <span className="text-red-500">Not enough Sol</span>
+              <div className="flex items-center space-x-2">
+                <img src="/images/sol-logo.png" alt="SOL" className="w-4 h-4" />
+                <span className="text-white">8 Sol</span>
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-white text-xl font-bold mb-4">UI/UX DESIGNER</h3>
+          
+          <p className="text-gray-400 mb-6">
+            Thousands of sponsorship jobs are advertised daily. If you haven't landed one, 
+            you're not looking in the right place.
+          </p>
+
+          <div className="mb-6">
+            <h4 className="text-white font-bold mb-3">Skills</h4>
+            <div className="flex flex-wrap gap-2">
+              {freelancer.skills?.map((skill) => (
+                <span 
+                  key={skill} 
+                  className="bg-[#26272B] text-white px-4 py-1 rounded-full text-sm"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-white font-bold mb-2">Portfolio</h4>
+              <a 
+                href="#" 
+                className="inline-flex items-center space-x-2 text-gray-400 hover:text-white"
+              >
+                <span>Website</span>
+              </a>
+            </div>
+            
+            <div>
+              <h4 className="text-white font-bold mb-2">Socials</h4>
+              <div className="flex space-x-3">
+                <a href="#" className="text-gray-400 hover:text-white">X.com</a>
+                <a href="#" className="text-gray-400 hover:text-white">Telegram</a>
+                <a href="#" className="text-gray-400 hover:text-white">Discord</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
-const Hero: React.FC = () => {
-  const [cardsVisible, setCardsVisible] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const heroRef = useRef<HTMLDivElement>(null);
-  const sliderRef = useRef<HTMLDivElement>(null);
-
-  const network = WalletAdapterNetwork.Devnet;
-  const endpoint = useMemo(() => clusterApiUrl(network), [network]);
-  const wallets = useMemo(
-    () => [
-      new PhantomWalletAdapter(),
-      new SolflareWalletAdapter({ network }),
-    ],
-    [network]
-  );
-
-
-  const navItems = [
-    { title: 'ABOUT', href: '#about' },
-    { title: 'HOW IT WORKS', href: '#how-it-works' },
-    { title: 'WHY SOLEER', href: '#why-soleer' },
-    { title: 'GOVERNANCE', href: '#governance' },
-    { title: 'ROADMAP', href: '#roadmap' },
-    { title: 'FAQ', href: 'faq' },
-    { title: 'MARKETPLACE EXPERIENCE', href: '#marketplace' }
-  ];
-
-  const heroTexts = [
-    "Bringing the Gig Economy On-Chain",
-    "Empowering Freelancers with Blockchain",
-    "Decentralized Work, Unlimited Potential"
-  ];
-
-  const gigs = [
-    { image: '/images/ads/ad1.png', title: 'Smart Contract Dev', price: '4 Sol', user: 'Soleer', userUrl: 'marketplace', description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....', descriptionUrl: '/gig/smart-contract-dev' },
-    { image: '/images/ads/ad2.png', title: 'Web3 UI/UX Design', price: '3.5 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I will Create digital arts, collectibles, and content to be sold as NFTs...', descriptionUrl: '/gig/web3-ui-ux-design' },
-    { image: '/images/ads/ad3.png', title: 'Content Creation', price: '4 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I Write articles, tutorials, and educational contents on everything blockchain..', descriptionUrl: '/gig/content-creation' },
-    { image: '/images/ads/ad4.png', title: 'Security Auditing', price: '5 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I Conduct security audits for smart contracts, blockchain protocols, and Web3 applications...', descriptionUrl: '/gig/security-auditing' },
-    { image: '/images/ads/ad5.png', title: 'Tokenomics Consulting', price: '2 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I will Designing and optimizing the economic model for your blockchain-based projects..', descriptionUrl: '/gig/tokenomics-consulting' },
-  ];
+const WalletConnectionModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+  const { connected } = useWallet();
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-      }
-    );
-
-    if (heroRef.current) {
-      observer.observe(heroRef.current);
+    if (connected) {
+      onClose();
     }
+  }, [connected, onClose]);
 
-    const timer = setTimeout(() => setCardsVisible(true), 1000);
+  if (!isOpen) return null;
 
-    const slider = sliderRef.current;
-    const intervalId = setInterval(() => {
-      if (slider) {
-        setCurrentCardIndex((prevIndex) => (prevIndex + 1) % gigs.length);
-        slider.style.transition = 'transform 0.5s ease-in-out';
-        slider.style.transform = `translateX(-${(currentCardIndex + 1) * (220 + 16)}px)`;
-        setTimeout(() => {
-          slider.style.transition = 'none';
-          slider.style.transform = 'translateX(0)';
-          slider.appendChild(slider.firstElementChild as Node);
-        }, 500);
-      }
-    }, 3000);
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-[70] flex items-center justify-center">
+      <div className="bg-[#1A1B1E] rounded-lg p-6 w-full max-w-md relative">
+        <button 
+          onClick={onClose}
+          className="absolute right-4 top-4 text-gray-400 hover:text-white"
+        >
+          <X size={24} />
+        </button>
+        
+        <h2 className="text-2xl font-bold text-white mb-6">Connect Wallet</h2>
+        <div className="flex justify-center">
+          <WalletMultiButton />
+        </div>
+        <p className="text-gray-400 text-center mt-4">
+          Connect your wallet to access the marketplace
+        </p>
+      </div>
+    </div>
+  );
+};
 
-    return () => {
-      clearTimeout(timer);
-      clearInterval(intervalId);
-      if (heroRef.current) {
-        observer.unobserve(heroRef.current);
-      }
-    };
-  }, [currentCardIndex]);
+
+
+
+
+
+
+const ZapIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+  </svg>
+);
+
+const StarIcon: React.FC = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+  </svg>
+);
+
+const JobCard: React.FC<JobCardProps> = ({ job, onProfileClick }) => (
+  <div className="bg-[#1A1B1E] rounded-lg overflow-hidden border border-[#26272B]">
+    <div className="relative h-[200px]">
+      <img 
+        src={job.image} 
+        alt={job.title} 
+        className="w-full h-full object-cover"
+      />
+      <button className="absolute top-3 right-3 p-1.5 bg-[#26272B] rounded">
+        <img src="/images/bookmark.png" alt="Bookmark" className="w-4 h-4" />
+      </button>
+    </div>
+    <div className="p-4">
+      <div 
+        className="flex items-center space-x-2 mb-2 cursor-pointer"
+        onClick={() => onProfileClick(job.freelancer)}
+      >
+        <img 
+          src={job.freelancer.avatar} 
+          alt={job.freelancer.name} 
+          className="w-6 h-6 rounded-full"
+        />
+        <span className="text-white text-sm">{job.freelancer.name}</span>
+      </div>
+      <h3 className="text-white font-bold mb-2">{job.title}</h3>
+      <p className="text-gray-400 text-sm mb-4 line-clamp-2">{job.description}</p>
+      <div className="flex justify-between items-center">
+        <button className="bg-[#1E1E1E] text-white px-4 py-1.5 rounded text-sm hover:bg-[#2A2A2A]">
+          HIRE
+        </button>
+        <div className="flex items-center space-x-1.5">
+          <img src="/images/sol-logo.png" alt="SOL" className="w-4 h-4" />
+          <span className="text-white text-sm">{job.price} Sol</span>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+const SearchIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+);
+
+
+const HeroWithWallet: React.FC = () => {
+  const endpoint = clusterApiUrl('devnet');
+  const wallets = [new PhantomWalletAdapter()];
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <>
-<Head>
-    
-    <title>Soleer - Find & Hire Top Freelancers on the Blockchain | P2P Service Marketplace</title>
-    <meta charSet="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="description" content="Discover and hire talented freelancers on Soleer, the first decentralized P2P service marketplace built on Solana. Fast, secure, and low-fee transactions for freelancers and clients worldwide." />
-    <meta name="keywords" content="Soleer, Solana marketplace, freelance platform, blockchain freelancing, P2P services, crypto freelancers, decentralized marketplace, Solana blockchain" />
-    <meta name="author" content="Soleer" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://soleer.xyz" />
-    <link rel="icon" href="/images/favicon.ico" />
-    
-   
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@soleerlabs" />
-    <meta name="twitter:creator" content="@soleerlabs" />
-    <meta name="twitter:title" content="Soleer - Hire Freelancers on Solana Blockchain" />
-    <meta name="twitter:description" content="The first P2P service marketplace on Solana. Hire top talent with instant, secure crypto payments. Join the future of freelancing." />
-    <meta name="twitter:image" content="https://soleer.xyz/images/favicon-16x16.png" />
-
-    <meta name="application-name" content="Soleer" />
-    <meta name="theme-color" content="#14F195" />
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
-
-    <meta name="language" content="English" />
-    <meta name="geo.region" content="US" />
-</Head>
-            <div 
-              ref={heroRef} 
-              className="min-h-screen text-white bg-cover bg-center font-neue-machina relative overflow-hidden"
-              style={{ backgroundImage: "url('/images/background/background.jpg')" }}
-            >
-              <div className="bg-black bg-opacity-30 min-h-screen relative z-10">
-                <Navbar
-                  navItems={navItems}
-                  title="Soleer - the First P2P Service Marketplace on Solana"
-                  description="Find and hire top freelancers on the Solana blockchain"
-                />
-
-                <main className="container mx-auto px-4 py-16 text-center">
-                  <h1 className="text-6xl font-extrabold mb-4 leading-tight transition-transform duration-300 ease-out">
-                    <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-teal-400 text-transparent bg-clip-text">
-                      <TypeWriter texts={heroTexts} delay={100} isVisible={isVisible} />
-                    </span>
-                  </h1>
-                  <p className="text-xl mb-8">
-                    <TypeWriter 
-                      texts={["Welcome to the future of decentralized service marketplaces, powered by Solana blockchain"]} 
-                      delay={50} 
-                      isVisible={isVisible} 
-                    />
-                  </p>
-
-                  <button className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-md text-lg font-semibold hover:from-purple-600 hover:to-pink-600 transition duration-300">
-                  <a href='marketplace'>Go to marketplace </a>
-                  </button>
-
-                  <div className="mt-16 relative overflow-hidden">
-                    <div className="flex justify-start mb-4">
-                      <h2 className="text-3xl font-bold text-gradient-to-r from-purple-400 via-blue-400 to-teal-400">
-                        Trending Gigs
-                      </h2>
-                    </div>
-                    <div className="relative w-full overflow-hidden">
-                      <div ref={sliderRef} className="flex space-x-4 transition-transform duration-500 ease-in-out">
-                        {[...gigs, ...gigs].map((gig, index) => (
-                          <div 
-                            key={index}
-                            className={`w-[220px] flex-shrink-0 flex flex-col bg-gray-800 bg-opacity-75 rounded-lg overflow-hidden transition-all duration-1000 ease-out ${
-                              cardsVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
-                            }`}
-                            style={{ transitionDelay: `${index * 200}ms` }}
-                          >
-                            <div className="flex items-center p-2 border-b border-gray-700">
-                              <Image src="/images/user.png" alt={gig.user} width={24} height={24} className="rounded-full mr-2" />
-                              <Link href='#' className="text-xs text-gray-400 hover:text-white transition duration-300">
-                                {gig.user}
-                              </Link>
-                            </div>
-                            <div className="w-full h-[160px] overflow-hidden">
-                              <Image src={gig.image} alt={gig.title} width={220} height={160} className="w-full h-full object-cover" />
-                            </div>
-                            <div className="p-3 flex flex-col gap-1 text-left">
-                              <h3 className="text-sm font-semibold">{gig.title}</h3>
-                              <Link href='marketplace' className="text-gray-400 text-xs hover:text-white transition duration-300">
-                                {gig.description}
-                              </Link>
-                              <div className="flex justify-between items-center mt-2">
-                                <button className="bg-gray-700 px-3 py-1 text-xs hover:bg-gray-600 transition duration-300">
-                                  HIRE
-                                </button>
-                                <span className="text-xs flex items-center">
-                                  <Image src="/images/sol-logo.png" alt="SOL" width={12} height={12} className="mr-1" />
-                                  {gig.price}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="flex justify-center mt-4 space-x-2">
-                      {gigs.map((_, index) => (
-                        <div 
-                          key={index} 
-                          className={`w-2 h-2 rounded-full ${
-                            index === currentCardIndex ? 'bg-gradient-to-r from-[#C134DA] to-[#14EDE9]' : 'bg-gray-500'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                </main>
-              </div>
-            </div>
-          </>
+          <Hero />
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
 };
 
-export default Hero;
+const Hero: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('trending');
+  const [selectedFreelancer, setSelectedFreelancer] = useState<Freelancer | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(true);
+  const { connected } = useWallet();
+
+
+  useEffect(() => {
+    if (!connected) {
+      setIsWalletModalOpen(true);
+    }
+  }, [connected]);
+
+    
+  const navItems = [
+    { title: 'ABOUT', href: '../#about' },
+    { title: 'HOW IT WORKS', href: '../#how-it-works' },
+    { title: 'WHY SOLEER', href: '../#why-soleer' },
+    { title: 'GOVERNANCE', href: '../#governance' },
+    { title: 'ROADMAP', href: '../#roadmap' },
+    { title: 'FAQ', href: 'faq' },
+    { title: 'MARKETPLACE EXPERIENCE', href: '../#marketplace' }
+  ];
+  
+  
+  const jobs = [
+    {
+      id: '1',
+      image: '../images/ads/ad1.png',
+      title: 'Smart Contract Dev',
+      description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      //{ image: '/images/ads/ad2.png', title: 'Web3 UI/UX Design', price: '3.5 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I will Create digital arts, collectibles, and content to be sold as NFTs...', descriptionUrl: '/gig/web3-ui-ux-design' },
+
+      id: '2',
+      image: '../images/ads/ad2.png',
+      title: 'Web3 UI/UX Design',
+      description: 'I will Create digital arts, collectibles, and content to be sold as NFTs...',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      //{ image: '/images/ads/ad3.png', title: 'Content Creation', price: '4 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I Write articles, tutorials, and educational contents on everything blockchain..', descriptionUrl: '/gig/content-creation' },
+      id: '3',
+      image: '../images/ads/ad3.png',
+      title: 'Content Creation',
+      description: 'I Write articles, tutorials, and educational contents on everything blockchain...',
+      price: 2.5,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      //{ image: '/images/ads/ad4.png', title: 'Security Auditing', price: '5 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I Conduct security audits for smart contracts, blockchain protocols, and Web3 applications...', descriptionUrl: '/gig/security-auditing' },
+      id: '4',
+      image: '../images/ads/ad4.png',
+      title: 'Security Auditing',
+      description: 'I Conduct security audits for smart contracts, blockchain protocols, and Web3 applications...',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      //{ image: '/images/ads/ad5.png', title: 'Tokenomics Consulting', price: '2 Sol', user: 'Soleer', userUrl: '/user/soleer', description: 'I will Designing and optimizing the economic model for your blockchain-based projects..', descriptionUrl: '/gig/tokenomics-consulting' },
+      id: '5',
+      image: '../images/ads/ad5.png',
+      title: 'Tokenomics Consulting',
+      description: 'I will Designing and optimizing the economic model for your blockchain-based projects..',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    // Repeat the first 5 jobs to fill out the grid
+    {
+      id: '6',
+      image: '../images/ads/ad1.png',
+      title: 'Smart Contract Dev',
+      description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      id: '7',
+      image: '../images/ads/ad1.png',
+      title: 'Smart Contract Dev',
+      description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      id: '8',
+      image: '../images/ads/ad1.png',
+      title: 'Smart Contract Dev',
+      description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      id: '9',
+      image: '../images/ads/ad1.png',
+      title: 'Smart Contract Dev',
+      description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    {
+      //{ image: '/images/ads/ad1.png', title: 'Smart Contract Dev', price: '4 Sol', user: 'Soleer', userUrl: 'marketplace', description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....', descriptionUrl: '/gig/smart-contract-dev' },
+      id: '10',
+      image: '../images/ads/ad1.png',
+      title: 'Smart Contract Dev',
+      description: 'I will Write and audit smart contracts for platforms like Ethereum, Solana, and Polkadot....',
+      price: 8,
+      freelancer: {
+        name: 'Freexyz',
+        avatar: '../images/user.png'
+      }
+    },
+    // Add more jobs as needed to fill out the grid
+  ];
+
+
+  const ITEMS_PER_PAGE = 15;
+  const totalPages = Math.ceil(jobs.length / ITEMS_PER_PAGE);
+
+  const handleProfileClick = (freelancer: Freelancer): void => {
+    setSelectedFreelancer(() => freelancer); // Fixed TypeScript error by using callback form
+  };
+
+  const filteredJobs = useCallback(() => {
+    if (!searchQuery.trim()) return jobs;
+    
+    const searchTerms = searchQuery.toLowerCase().split(' ');
+    return jobs.filter(job => {
+      const searchableText = `${job.title} ${job.description} ${job.freelancer.name}`.toLowerCase();
+      return searchTerms.every(term => searchableText.includes(term));
+    });
+  }, [searchQuery]);
+
+  const paginatedJobs = filteredJobs().slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  
+
+
+  return (
+    <div className="min-h-screen bg-[#0D0D0D] z-80">
+      <Navbar 
+        navItems={navItems}
+        title="Soleer Marketplace"
+        description="Find and hire top freelancers on the blockchain"
+      />
+      
+      {/* Wallet Connection Modal */}
+      <WalletConnectionModal 
+        isOpen={isWalletModalOpen} 
+        onClose={() => setIsWalletModalOpen(false)} 
+      />
+
+      {/* Only show main content if wallet is connected */}
+      {connected ? (
+        <main className="container mx-auto px-4 pt-20">
+
+        {/* Added z-10 to ensure search bar doesn't block navbar dropdown */}
+        <div className="relaive mb-6 z-05">
+          <input
+            type="text"
+            placeholder="Search for jobs to hire"
+            className="w-full bg-[#1A1B1E] p-3 pl-10 rounded-lg text-white placeholder-gray-400"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+            <SearchIcon />
+          </div>
+        </div>
+
+        {/* Added z-10 to ensure filters don't block navbar dropdown */}
+        <div className="flex space-x-6 mb-6 z-10 relative">
+          <button
+            className={`flex items-center space-x-2 px-4 py-2 rounded ${
+              activeTab === 'trending' ? 'text-[#8B5CF6]' : 'text-gray-400'
+            }`}
+            onClick={() => setActiveTab('trending')}
+          >
+            <span className="text-lg">⚡</span>
+            <span>Trending</span>
+          </button>
+          <button
+            className={`flex items-center space-x-2 px-4 py-2 rounded ${
+              activeTab === 'popular' ? 'text-[#8B5CF6]' : 'text-gray-400'
+            }`}
+            onClick={() => setActiveTab('popular')}
+          >
+            <span className="text-lg">⭐</span>
+            <span>Popular</span>
+          </button>
+        </div>
+
+        {/* Added z-0 to ensure grid stays below navbar dropdown */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 relative z-0">
+          {paginatedJobs.map(job => (
+            <JobCard 
+              key={job.id}
+              job={job}
+              onProfileClick={handleProfileClick}
+            />
+          ))}
+        </div>
+
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-8 space-x-2">
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-4 py-2 rounded ${
+                  currentPage === i + 1
+                    ? 'bg-[#8B5CF6] text-white'
+                    : 'bg-[#1A1B1E] text-gray-400 hover:bg-[#26272B]'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
+ </main>
+      ) : (
+        <div className="container mx-auto px-4 pt-20 text-center">
+          <p className="text-white text-xl">Please connect your wallet to access the marketplace</p>
+          <div className="mt-4">
+            <WalletMultiButton />
+          </div>
+        </div>
+      )}
+      <FreelancerProfileModal 
+        isOpen={!!selectedFreelancer}
+        onClose={() => setSelectedFreelancer(null)}
+        freelancer={selectedFreelancer}
+      />
+    </div>
+  );
+};
+
+export default HeroWithWallet;

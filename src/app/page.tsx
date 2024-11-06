@@ -11,12 +11,7 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <AboutSection />
-      <HowItWorksSection />
-      <WhySection />
-      <ExperienceSection />
-      <TokenSection />
-      <RoadMapSection />
+
       <Footer />
      
     </div>
