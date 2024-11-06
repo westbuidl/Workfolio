@@ -20,7 +20,7 @@ const FAQSection: React.FC = () => {
     { title: 'INBOX', href: '../inbox' },
     { title: 'PROFILE', href: '../profile' },
     { title: 'MARKETPLACE', href: '/' },
-    { title: 'SOLEER HOME', href: '#' },
+    { title: 'SOLEER HOME', href: 'soleer.xyz' },
     { title: 'FAQ', href: '../faq' },
   ];
 

@@ -270,7 +270,7 @@ const Hero: React.FC = () => {
     { title: 'DASHBOARD', href: '../profile' },
     { title: 'INBOX', href: '../inbox' },
     { title: 'PROFILE', href: '../profile' },
-    { title: 'SOLEER HOME', href: '#' },
+    { title: 'SOLEER HOME', href: 'soleer.xyz' },
     { title: 'FAQ', href: 'faq' },
   ];
   
