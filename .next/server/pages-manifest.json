@@ -1,11 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/dashboard": "pages/dashboard.js",
-  "/profile": "pages/profile.js",
-  "/inbox": "pages/inbox.js",
-  "/terms-of-service": "pages/terms-of-service.js",
-  "/api/profile/check-email": "pages/api/profile/check-email.js",
-  "/privacy-policy": "pages/privacy-policy.js"
-}
+{}
