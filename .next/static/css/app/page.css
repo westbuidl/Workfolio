@@ -2027,6 +2027,9 @@ video {
 .uppercase {
   text-transform: uppercase;
 }
+.italic {
+  font-style: italic;
+}
 .leading-\[28\.8px\] {
   line-height: 28.8px;
 }

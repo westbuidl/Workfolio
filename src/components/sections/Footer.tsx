@@ -54,13 +54,12 @@ const Footer = () => {
         
         {/* Navigation */}
         <nav className="flex flex-wrap justify-center gap-x-6 gap-y-3 mb-8">
-          <Link href="#about" className="text-sm hover:text-gray-300 transition-colors">ABOUT</Link>
-          <Link href="#how-it-works" className="text-sm hover:text-gray-300 transition-colors">HOW IT WORKS</Link>
-          <Link href="#why-soleer" className="text-sm hover:text-gray-300 transition-colors">WHY SOLEER</Link>
-          <Link href="#governance" className="text-sm hover:text-gray-300 transition-colors">GOVERNANCE</Link>
-          <Link href="#roadmap" className="text-sm hover:text-gray-300 transition-colors">ROADMAP</Link>
-          <Link href="faq" className="text-sm hover:text-gray-300 transition-colors">FAQ</Link>
-          <Link href="#marketplace" className="text-sm hover:text-gray-300 transition-colors">MARKETPLACE EXPERIENCE</Link>
+          <Link href="../dashboard" className="text-sm hover:text-gray-300 transition-colors">DASHBOARD</Link>
+          <Link href="../inbox" className="text-sm hover:text-gray-300 transition-colors">INBOX</Link>
+          <Link href="../profile" className="text-sm hover:text-gray-300 transition-colors">PROFILE</Link>
+          <Link href="../" className="text-sm hover:text-gray-300 transition-colors">MARKETPLACE</Link>
+          <Link href="https://soleer.xyz" className="text-sm hover:text-gray-300 transition-colors">SOLEER HOME</Link>
+
         </nav>
         
         {/* Footer Bottom */}

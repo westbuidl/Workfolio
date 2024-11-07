@@ -17,7 +17,7 @@ export default async function handler(
         host: "mail.privateemail.com",
         port: 465,
         auth: {
-          user: "buidl@realmchain.co",
+          user: "founder@soleer.xyz",
           pass: "@#possibilities",
         },
       });
@@ -74,7 +74,7 @@ export default async function handler(
             
             <div class="footer">
               <p>This message was sent to ${email}</p>
-              <p>&copy; ${new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+              <p>&copy; ${new Date().getFullYear()} Soleer Labs. All rights reserved.</p>
             </div>
           </div>
         </body>
@@ -82,7 +82,7 @@ export default async function handler(
       `;
 
       await transporter.sendMail({
-        from: "buidl@realmchain.co", // Replace with your email
+        from: "founder@soleer.xyz", // Replace with your email
         to: email,
         subject: "Your Verification Code",
         html: htmlContent,
