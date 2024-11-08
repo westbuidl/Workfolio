@@ -178,7 +178,7 @@ const WalletConnectionModal: React.FC<{ isOpen: boolean; onClose: () => void }> 
         {/* Wallet connection section */}
         <div className="bg-[#0D0D0D] p-6 rounded-xl mb-6 border border-[#8B5CF6]/10">
           <div className="flex justify-center mb-4">
-            <img src="/images/sol-logo.png" alt="Solana" className="w-12 h-12" />
+            <img src="/images/Soleer.png" alt="Solana" className="w-12 h-12" />
           </div>
           <div className="flex justify-center">
             <WalletMultiButton className="!bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6B2CF5] !transition-all !duration-200 !rounded-xl !px-8 !py-3" />
