@@ -17,7 +17,7 @@ export default async function handler(
         host: "mail.privateemail.com",
         port: 465,
         auth: {
-          user: "founder@soleer.xyz",
+          user: "verification@soleer.xyz",
           pass: "@#possibilities",
         },
       });

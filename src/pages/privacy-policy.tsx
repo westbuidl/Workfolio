@@ -302,7 +302,7 @@ const PrivacyPolicy: React.FC = () => {
 
             <p className="mb-4 text-gray-300">
               <TypeWriter
-                text="To exercise these rights, please contact us at [founder@soleer.xyz]:"
+                text="To exercise these rights, please contact us at [contact@soleer.xyz]:"
                 isVisible={isVisible}
                 delay={10}
               />
@@ -356,7 +356,7 @@ const PrivacyPolicy: React.FC = () => {
               />
             </p>
             <ul className="list-disc pl-6 mb-4 text-gray-300">
-              <li><TypeWriter text="Email:founder@soleer.xyz" isVisible={isVisible} delay={10} /></li>
+              <li><TypeWriter text="Email:contact@soleer.xyz" isVisible={isVisible} delay={10} /></li>
               <li><TypeWriter text="Address : SoleerLabs London England" isVisible={isVisible} delay={10} /></li>
 
             </ul>

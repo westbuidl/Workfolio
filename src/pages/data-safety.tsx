@@ -210,7 +210,7 @@ Smart Contract Audits: We conduct regular audits by third-party blockchain secur
           </Section>
 
           <Section title="12. Reporting Security Vulnerabilities">
-            <p className="mb-4 text-gray-300">We encourage responsible disclosure of security vulnerabilities. If you discover a vulnerability, please report it to <b>founder@soleer.xyz</b> We will investigate and take action as necessary.</p>
+            <p className="mb-4 text-gray-300">We encourage responsible disclosure of security vulnerabilities. If you discover a vulnerability, please report it to <b>contact@soleer.xyz</b> We will investigate and take action as necessary.</p>
             
           </Section>
 
