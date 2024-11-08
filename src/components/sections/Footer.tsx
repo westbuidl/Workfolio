@@ -3,6 +3,37 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const Footer = () => {
+  const skillCategories = [
+    'Smart Contract Development',
+    'DeFi Engineering',
+    'Blockchain Architecture',
+    'NFT Development',
+    'Token Engineering',
+    'Web3 Security',
+    'Solidity Programming',
+    'Crypto Trading Bots',
+    'dApp Development',
+    'Zero Knowledge Proofs',
+    'Layer 2 Solutions',
+    'DAO Development',
+    'Tokenomics Design',
+    'Cross-chain Development',
+    'Wallet Integration',
+    'Web, Mobile & Software Dev',
+    'IT & Networking',
+    'Data Science & Analytics',
+    'Accounting & Consulting',
+    'Legal',
+    'Translation',
+    'Design & Creative',
+    'Engineering & Architecture',
+    'Writing',
+    'Admin Support',
+    'Customer Service',
+    'Sales & Marketing',
+    'Gaming'
+  ];
+
   return (
     <footer className="relative bg-[#020202] text-white py-8 px-4 md:px-16 overflow-hidden">
       {/* Background glow effect */}
@@ -16,9 +47,8 @@ const Footer = () => {
         />
       </div>
 
-
       <div className="container mx-auto relative z-10">
-        {/* Logo and CTA Section */}
+        {/* Logo and Skills Section */}
         <div className="flex flex-col items-center mb-8">
           <div className="relative w-12 h-12 mb-4">
             <Image
@@ -28,26 +58,35 @@ const Footer = () => {
               className="object-cover"
             />
           </div>
-          <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">Join the Soleer Revolution</h2>
-          <p className="text-center mb-6 max-w-2xl px-4 text-sm sm:text-base">
-            Be part of the future of work. Sign up for our waitlist and be the first to
-            experience the power of decentralized service marketplaces.
-          </p>
           
-          {/* Email Form */}
-          <div className="w-full max-w-md mb-8 px-4">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-0">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-grow px-4 py-2 rounded-full sm:rounded-r-none bg-[#333] text-white focus:outline-none focus:ring-1 focus:ring-purple-500"
-              />
-              <button
-                type="submit"
-                className="px-6 py-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full sm:rounded-l-none font-semibold hover:opacity-90 transition-opacity"
+          {/* Skills Section */}
+          <div className="w-full max-w-4xl mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-4xl font-bold">Popular Skills</h2>
+              <Link 
+                href="#" 
+                className="text-blue-500 hover:text-blue-400 flex items-center"
               >
-                Join waitlist
-              </button>
+                Show all skills
+                <span className="ml-2">→</span>
+              </Link>
+            </div>
+            <p className="text-lg mb-6">
+            Connect and transact in the global digital marketplace.
+            </p>
+            
+            {/* Skills Grid */}
+            <div className="flex flex-wrap gap-3">
+              {skillCategories.map((skill) => (
+                <Link
+                  key={skill}
+                  href={'#'}
+                  //href={`/skills/${skill.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="bg-white bg-opacity-10 hover:bg-opacity-20 px-4 py-2 rounded-full text-sm transition-all"
+                >
+                  {skill}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
@@ -61,6 +100,7 @@ const Footer = () => {
           <Link href="https://soleer.xyz" className="text-sm hover:text-gray-300 transition-colors">SOLEER HOME</Link>
 
         </nav>
+        
         
         {/* Footer Bottom */}
         <div className="border-t border-gray-800 pt-8">
@@ -113,7 +153,6 @@ const Footer = () => {
                     />
                   </div>
                 </a>
-
               </div>
             </div>
           </div>
