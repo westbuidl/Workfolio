@@ -1,9 +1,13 @@
+
+
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { X } from 'lucide-react';
 import Footer from "@/components/sections/Footer";
 import Navbar from "@/components/common/Navbar";
 import "../app/globals.css";
 import ComingSoonModal from './ComingSoonModal';
+
 
 interface Freelancer {
   name: string;
@@ -197,12 +201,18 @@ const MarketplaceSection: React.FC = () => {
 
 
   useEffect(() => {
-    setIsModalOpen(true);
+    // Short delay to ensure modal appears after page load
+    const timer = setTimeout(() => {
+      setIsModalOpen(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
-  };
+  }, []);
+
 
     
   const navItems = [
@@ -450,10 +460,13 @@ const MarketplaceSection: React.FC = () => {
       
       
       <Footer />
-      <ComingSoonModal 
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-      />
+      {isModalOpen && (
+        <ComingSoonModal 
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
+     
     </div>
   );
 };
@@ -477,6 +490,6 @@ const styles = `
 
 export default MarketplaceSection;
 
-function setIsModalOpen(arg0: boolean) {
-  throw new Error('Function not implemented.');
-}
+//function setIsModalOpen(arg0: boolean) {
+  //throw new Error('Function not implemented.');
+//}

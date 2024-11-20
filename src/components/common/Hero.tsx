@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import Footer from "@/components/sections/Footer";
 import Navbar from './Navbar';
 import "@/app/globals.css";
+import ComingSoonModal from '../../pages/ComingSoonModal';
 import {
   ConnectionProvider,
   WalletProvider,
@@ -289,6 +290,100 @@ const HeroWithWallet: React.FC = () => {
   );
 };
 
+
+
+// Verification Banner Component
+const VerificationBanner: React.FC = () => {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 7,
+    hours: 23,
+    minutes: 59,
+    seconds: 59
+  });
+  const router = useRouter();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
+        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
+        return prev;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const TimeUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
+    <div className="text-center">
+      <div className="bg-gradient-to-br from-purple-500/30 to-indigo-500/30 rounded-lg px-4 py-3 border border-purple-500/20">
+        <span className="text-white text-2xl font-bold">{value.toString().padStart(2, '0')}</span>
+      </div>
+      <span className="text-white/80 text-xs mt-1 block">{label}</span>
+    </div>
+  );
+
+  return (
+    <div className="animate-gradient-x bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 rounded-2xl mx-4 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.02]">
+      <div className="relative">
+        {/* Enhanced decorative elements */}
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.6),transparent)] animate-pulse"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]"></div>
+        
+        {/* Content */}
+        <div className="relative px-6 py-8">
+          <div className="container mx-auto flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
+            <div className="flex items-center space-x-4">
+              <div className="bg-white/10 rounded-full p-3 backdrop-blur-sm border border-white/20 animate-bounce">
+                <svg
+                  className="h-8 w-8 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-white font-bold text-2xl mb-1">
+                  Account Verification Snapshot
+                </h3>
+                <p className="text-white/80 text-base">
+                  Verify your account to unlock exclusive features
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
+              <div className="flex space-x-4">
+                {Object.entries(timeLeft).map(([key, value]) => (
+                  <TimeUnit key={key} value={value} label={key.charAt(0).toUpperCase() + key.slice(1)} />
+                ))}
+              </div>
+
+              <button
+                onClick={() => router.push('/profile')}
+                className="bg-white px-8 py-3 rounded-xl font-semibold text-purple-600 hover:bg-white/90 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                Verify Email
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 const Hero: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('trending');
@@ -296,6 +391,22 @@ const Hero: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(true);
   const { connected } = useWallet();
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+
+
+  useEffect(() => {
+    // Short delay to ensure modal appears after page load
+    const timer = setTimeout(() => {
+      setIsModalOpen(true);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setIsModalOpen(false);
+  }, []);
+
 
   useEffect(() => {
     if (!connected) {
@@ -467,51 +578,55 @@ const Hero: React.FC = () => {
         description="Find and hire top freelancers on the blockchain"
       />
 
-      {/* Enhanced Wallet Connection Modal */}
       <WalletConnectionModal
         isOpen={isWalletModalOpen}
         onClose={() => setIsWalletModalOpen(false)}
       />
 
-      {/* Only show main content if wallet is connected */}
       {connected ? (
-        <main className="container mx-auto px-4 pt-20">
+        <main className="container mx-auto px-4">
+          {/* Sticky header with buttons */}
+          <div className="sticky top-20 bg-[#0D0D0D] pt-6 pb-4 z-20">
+            
 
-          {/* Added z-10 to ensure search bar doesn't block navbar dropdown */}
-          <div className="relaive mb-6 z-05">
-            <input
-              type="text"
-              placeholder="Search for jobs to hire"
-              className="w-full bg-[#1A1B1E] p-3 pl-10 rounded-lg text-white placeholder-gray-400"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              <SearchIcon />
+            {/* Search bar */}
+            <div className="relative mb-6">
+              <input
+                type="text"
+                placeholder="Search for jobs to hire"
+                className="w-full bg-[#1A1B1E] p-3 pl-10 rounded-lg text-white placeholder-gray-400"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <SearchIcon />
+              </div>
+            </div>
+
+            {/* Filter buttons */}
+            <div className="flex space-x-6 mb-6">
+              <button
+                className={`flex items-center space-x-2 px-4 py-2 rounded ${
+                  activeTab === 'trending' ? 'text-[#8B5CF6]' : 'text-gray-400'
+                }`}
+                onClick={() => setActiveTab('trending')}
+              >
+                <span className="text-lg">⚡</span>
+                <span>Trending</span>
+              </button>
+              <button
+                className={`flex items-center space-x-2 px-4 py-2 rounded ${
+                  activeTab === 'popular' ? 'text-[#8B5CF6]' : 'text-gray-400'
+                }`}
+                onClick={() => setActiveTab('popular')}
+              >
+                <span className="text-lg">⭐</span>
+                <span>Popular</span>
+              </button>
             </div>
           </div>
 
-          {/* Added z-10 to ensure filters don't block navbar dropdown */}
-          <div className="flex space-x-6 mb-6 z-10 relative">
-            <button
-              className={`flex items-center space-x-2 px-4 py-2 rounded ${activeTab === 'trending' ? 'text-[#8B5CF6]' : 'text-gray-400'
-                }`}
-              onClick={() => setActiveTab('trending')}
-            >
-              <span className="text-lg">⚡</span>
-              <span>Trending</span>
-            </button>
-            <button
-              className={`flex items-center space-x-2 px-4 py-2 rounded ${activeTab === 'popular' ? 'text-[#8B5CF6]' : 'text-gray-400'
-                }`}
-              onClick={() => setActiveTab('popular')}
-            >
-              <span className="text-lg">⭐</span>
-              <span>Popular</span>
-            </button>
-          </div>
-
-          {/* Added z-0 to ensure grid stays below navbar dropdown */}
+          {/* Grid of jobs */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 relative z-0">
             {paginatedJobs.map(job => (
               <JobCard
@@ -522,16 +637,18 @@ const Hero: React.FC = () => {
             ))}
           </div>
 
+          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex justify-center mt-8 space-x-2">
               {Array.from({ length: totalPages }, (_, i) => (
                 <button
                   key={i + 1}
                   onClick={() => setCurrentPage(i + 1)}
-                  className={`px-4 py-2 rounded ${currentPage === i + 1
+                  className={`px-4 py-2 rounded ${
+                    currentPage === i + 1
                       ? 'bg-[#8B5CF6] text-white'
                       : 'bg-[#1A1B1E] text-gray-400 hover:bg-[#26272B]'
-                    }`}
+                  }`}
                 >
                   {i + 1}
                 </button>
@@ -559,8 +676,18 @@ const Hero: React.FC = () => {
         onClose={() => setSelectedFreelancer(null)}
         freelancer={selectedFreelancer}
       />
+
+      <Footer />
+      {isModalOpen && (
+        <ComingSoonModal 
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
+     
     </div>
   );
 };
 
 export default HeroWithWallet;
+

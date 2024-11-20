@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react';
-import { Image, Copy, Check, Mail, Loader2 } from 'lucide-react';
+import { Image, Copy, Check, Mail, Loader2, X } from 'lucide-react';
 import { useRouter } from 'next/router';
 import { useWallet } from '@solana/wallet-adapter-react';
 import Navbar from '@/components/common/Navbar';
@@ -9,6 +9,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import "../app/globals.css";
 
+
+
+
+
 const generateOTP = (): string => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
@@ -16,6 +20,14 @@ const generateOTP = (): string => {
 interface ApiError {
   message: string;
 }
+
+interface ToastAlert {
+  show: boolean;
+  message: string;
+  type: 'success' | 'error';
+}
+
+
 
 // Types
 interface FormData {
@@ -62,6 +74,26 @@ const ProfilePage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [isCheckingVerification, setIsCheckingVerification] = useState(true);
+
+  const [toastAlert, setToastAlert] = useState<ToastAlert>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
+
+  // Show toast alert helper function
+  const showToastAlert = (message: string, type: 'success' | 'error') => {
+    setToastAlert({
+      show: true,
+      message,
+      type
+    });
+    setTimeout(() => {
+      setToastAlert(prev => ({ ...prev, show: false }));
+    }, 3000);
+  };
+
+  
 
   // Add effect to check email verification status on component mount
   useEffect(() => {
@@ -302,8 +334,7 @@ const ProfilePage = () => {
         setOtpExpiry(0);
         setCountdown(0);
 
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
+        showToastAlert('Email verification successful!', 'success');
       } catch (error) {
         console.error('Error updating verification status:', error);
         if (error instanceof Error) {
@@ -319,7 +350,6 @@ const ProfilePage = () => {
       setVerificationError('Invalid verification code. Please try again.');
     }
   };
-
   // Countdown effect
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -368,27 +398,12 @@ const ProfilePage = () => {
         return;
       }
 
-      // Create a complete profile object with all fields
       const profileData = {
         walletAddress: publicKey.toString(),
         email,
         isEmailVerified,
         verifiedEmail: email,
-        // Profile data
-        username: formData.username,
-        name: formData.name,
-        bio: formData.bio,
-        website: formData.website,
-        twitter: formData.twitter,
-        linkedin: formData.linkedin,
-        discord: formData.discord,
-        profileImageUrl: formData.profileImageUrl,
-        bannerImageUrl: formData.bannerImageUrl,
-        // Job data
-        jobTitle: formData.jobTitle,
-        skills: formData.skills,
-        jobDescription: formData.jobDescription,
-        portfolio: formData.portfolio
+        ...formData
       };
 
       const response = await fetch('/api/profile/update', {
@@ -404,30 +419,48 @@ const ProfilePage = () => {
         throw new Error(errorData.message || 'Failed to update profile');
       }
 
-      // Update local state with the saved data
       const savedData = await response.json();
       setFormData(prevData => ({
         ...prevData,
         ...savedData
       }));
 
-      setShowAlert(true);
-      setTimeout(() => setShowAlert(false), 3000);
+      showToastAlert('Profile updated successfully!', 'success');
     } catch (error) {
       console.error('Error saving profile:', error);
       setSaveError(error instanceof Error ? error.message : 'Failed to save profile');
+      showToastAlert('Failed to update profile', 'error');
     } finally {
       setIsSaving(false);
     }
   };
 
-
-
-
-
   // New state for email verification
 
+  const renderToastAlert = () => {
+    if (!toastAlert.show) return null;
 
+    return (
+      <div className={`fixed top-4 right-4 z-50 w-96 ${toastAlert.type === 'success' ? 'bg-green-900/90' : 'bg-red-900/90'} border ${toastAlert.type === 'success' ? 'border-green-500' : 'border-red-500'} rounded-lg p-4 shadow-lg transition-opacity duration-300`}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            {toastAlert.type === 'success' ? (
+              <Check className="w-5 h-5 text-green-500 mr-2" />
+            ) : (
+              <X className="w-5 h-5 text-red-500 mr-2" />
+            )}
+            <p className="text-white">{toastAlert.message}</p>
+          </div>
+          <button
+            onClick={() => setToastAlert(prev => ({ ...prev, show: false }))}
+            className="text-gray-400 hover:text-white"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+    );
+  };
   const navItems = [
     { title: 'DASHBOARD', href: '../dashboard' },
     { title: 'INBOX', href: '../inbox' },
@@ -623,10 +656,20 @@ const ProfilePage = () => {
     );
   };
 
+  
 
   return (
 
     <div className="min-h-screen bg-[#0A0A0B] text-white">
+      {renderToastAlert()}
+      {showAlert && (
+        <div className="bg-red-900 border border-red-600 rounded-lg p-4 max-w-md mx-auto mt-8">
+          <p className="text-white text-center">
+            Please connect your wallet to access your profile. Redirecting to home page...
+          </p>
+        </div>
+      )}
+
       <div className="relative z-50">
         <Navbar navItems={navItems} title="" description="" />
       </div>

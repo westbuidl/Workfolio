@@ -1,4 +1,6 @@
 import type { AppProps } from 'next/app';
+import { SessionProvider } from 'next-auth/react';
+//import type { AppProps } from 'next/app';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { WalletProvider } from '@solana/wallet-adapter-react';
 import { ConnectionProvider } from '@solana/wallet-adapter-react';
@@ -10,7 +12,7 @@ import { useMemo } from 'react';
 // Default styles that can be overridden by your app
 require('@solana/wallet-adapter-react-ui/styles.css');
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   // The network can be set to 'devnet', 'testnet', or 'mainnet-beta'.
   const network = WalletAdapterNetwork.Devnet;
 
@@ -32,9 +34,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
+      <SessionProvider session={session}>
         <WalletModalProvider>
           <Component {...pageProps} />
         </WalletModalProvider>
+        </SessionProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
