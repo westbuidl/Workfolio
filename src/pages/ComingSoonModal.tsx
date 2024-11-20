@@ -14,7 +14,7 @@ const ComingSoonModal: React.FC<ComingSoonModalProps> = ({ isOpen }) => {
 
   useEffect(() => {
     // Set a specific target date (e.g., January 1, 2025 at 00:00:00)
-    const targetDate = new Date('2025-01-01T00:00:00').getTime();
+    const targetDate = new Date('2024-12-25T00:00:00').getTime();
 
     const timer = setInterval(() => {
       const now = new Date().getTime();

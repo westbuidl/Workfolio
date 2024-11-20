@@ -292,96 +292,6 @@ const HeroWithWallet: React.FC = () => {
 
 
 
-// Verification Banner Component
-const VerificationBanner: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 7,
-    hours: 23,
-    minutes: 59,
-    seconds: 59
-  });
-  const router = useRouter();
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        if (prev.hours > 0) return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        if (prev.days > 0) return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
-        return prev;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const TimeUnit: React.FC<{ value: number; label: string }> = ({ value, label }) => (
-    <div className="text-center">
-      <div className="bg-gradient-to-br from-purple-500/30 to-indigo-500/30 rounded-lg px-4 py-3 border border-purple-500/20">
-        <span className="text-white text-2xl font-bold">{value.toString().padStart(2, '0')}</span>
-      </div>
-      <span className="text-white/80 text-xs mt-1 block">{label}</span>
-    </div>
-  );
-
-  return (
-    <div className="animate-gradient-x bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-700 rounded-2xl mx-4 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.02]">
-      <div className="relative">
-        {/* Enhanced decorative elements */}
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(0deg,transparent,rgba(255,255,255,0.6),transparent)] animate-pulse"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-indigo-500/10 backdrop-blur-sm"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.1)_1px,transparent_1px)] bg-[length:20px_20px]"></div>
-        
-        {/* Content */}
-        <div className="relative px-6 py-8">
-          <div className="container mx-auto flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-            <div className="flex items-center space-x-4">
-              <div className="bg-white/10 rounded-full p-3 backdrop-blur-sm border border-white/20 animate-bounce">
-                <svg
-                  className="h-8 w-8 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-white font-bold text-2xl mb-1">
-                  Account Verification Snapshot
-                </h3>
-                <p className="text-white/80 text-base">
-                  Verify your account to unlock exclusive features
-                </p>
-              </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-8">
-              <div className="flex space-x-4">
-                {Object.entries(timeLeft).map(([key, value]) => (
-                  <TimeUnit key={key} value={value} label={key.charAt(0).toUpperCase() + key.slice(1)} />
-                ))}
-              </div>
-
-              <button
-                onClick={() => router.push('/profile')}
-                className="bg-white px-8 py-3 rounded-xl font-semibold text-purple-600 hover:bg-white/90 transition duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                Verify Email
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 
 const Hero: React.FC = () => {
@@ -679,11 +589,10 @@ const Hero: React.FC = () => {
 
       <Footer />
       {isModalOpen && (
-        <ComingSoonModal 
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
-      )}
+  <ComingSoonModal 
+    isOpen={isModalOpen}
+  />
+)}
      
     </div>
   );

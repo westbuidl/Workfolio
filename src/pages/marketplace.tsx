@@ -461,11 +461,10 @@ const MarketplaceSection: React.FC = () => {
       
       <Footer />
       {isModalOpen && (
-        <ComingSoonModal 
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
-      )}
+  <ComingSoonModal 
+    isOpen={isModalOpen}
+  />
+)}
      
     </div>
   );
