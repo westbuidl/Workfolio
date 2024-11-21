@@ -9,12 +9,19 @@ import {
   ConnectionProvider,
   WalletProvider,
   useWallet,
-  useConnection,
 } from '@solana/wallet-adapter-react';
-import { WalletModalProvider, WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { 
+  WalletModalProvider, 
+  WalletMultiButton, 
+  WalletDisconnectButton 
+} from '@solana/wallet-adapter-react-ui';
 import { clusterApiUrl } from '@solana/web3.js';
-import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets';
+import { 
+  PhantomWalletAdapter, 
+  SolflareWalletAdapter 
+} from '@solana/wallet-adapter-wallets';
 require('@solana/wallet-adapter-react-ui/styles.css');
+
 
 interface Freelancer {
   name: string;
@@ -139,82 +146,68 @@ const FreelancerProfileModal: React.FC<FreelancerProfileModalProps> = ({ isOpen,
   );
 };
 
-const WalletConnectionModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
-  const { connected } = useWallet();
+const WalletConnectionModal: React.FC<{ 
+  isOpen: boolean; 
+  onClose: () => void 
+}> = ({ isOpen, onClose }) => {
+  const { connected, wallet } = useWallet();
 
-  useEffect(() => {
+  // Prevent closing if not connected
+  const handleClose = () => {
     if (connected) {
       onClose();
     }
-  }, [connected, onClose]);
-
-  const handleClose = () => {
-    window.location.href = '/'; // Use window.location for navigation
   };
 
   if (!isOpen) return null;
 
-
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-70 z-[70] flex items-center justify-center backdrop-blur-sm">
+    <div className="fixed inset-0 bg-black bg-opacity-70 z-[150] flex items-center justify-center backdrop-blur-sm">
       <div className="bg-gradient-to-br from-[#1A1B1E] to-[#26272B] rounded-2xl p-8 w-full max-w-md relative border border-[#8B5CF6]/20 shadow-xl">
-        {/* Close button with gradient hover effect */}
-        <button
-          onClick={handleClose}
-          className="absolute right-4 top-4 p-2 rounded-full transition-all duration-200 bg-gradient-to-r hover:from-[#8B5CF6] hover:to-[#7C3AED] group"
-        >
-          <X size={24} className="text-gray-400 group-hover:text-white" />
-        </button>
-
-        {/* Header with gradient text */}
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-transparent bg-clip-text">
             Connect Wallet
           </h2>
-          <p className="text-gray-400">
-            Join the decentralized marketplace
+          <p className="text-gray-400 mb-6">
+            {connected 
+              ? `Connected with ${wallet?.adapter.name}` 
+              : "Join the decentralized marketplace"}
           </p>
-        </div>
 
-        {/* Wallet connection section */}
-        <div className="bg-[#0D0D0D] p-6 rounded-xl mb-6 border border-[#8B5CF6]/10">
-          <div className="flex justify-center mb-4">
-            <img src="/images/Soleer.png" alt="Solana" className="w-12 h-12" />
-          </div>
-          <div className="flex justify-center">
-            <WalletMultiButton className="!bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6B2CF5] !transition-all !duration-200 !rounded-xl !px-8 !py-3" />
-          </div>
-        </div>
+          {!connected ? (
+            <div className="bg-[#0D0D0D] p-6 rounded-xl mb-6 border border-[#8B5CF6]/10">
+              <div className="flex justify-center mb-4">
+                <img src="/images/Soleer.png" alt="Solana" className="w-12 h-12" />
+              </div>
+              <div className="flex justify-center">
+                <WalletMultiButton 
+                  className="!bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#6B2CF5] !transition-all !duration-200 !rounded-xl !px-8 !py-3"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="bg-[#0D0D0D] p-6 rounded-xl mb-6 border border-[#8B5CF6]/10 flex flex-col items-center space-y-4">
+              <WalletDisconnectButton 
+                className="!bg-red-600 !rounded-xl !px-8 !py-3"
+              />
+            </div>
+          )}
 
-        {/* Features list */}
-        <div className="space-y-3">
-          <div className="flex items-center space-x-3 text-gray-400">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
-              <span className="text-white text-sm">✓</span>
-            </div>
-            <span>Access to exclusive gigs</span>
-          </div>
-          <div className="flex items-center space-x-3 text-gray-400">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
-              <span className="text-white text-sm">✓</span>
-            </div>
-            <span>Secure blockchain payments</span>
-          </div>
-          <div className="flex items-center space-x-3 text-gray-400">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
-              <span className="text-white text-sm">✓</span>
-            </div>
-            <span>Decentralized escrow system</span>
+          <div className="space-y-3">
+            {['Access to exclusive gigs', 'Secure blockchain payments', 'Decentralized escrow system'].map((feature, index) => (
+              <div key={index} className="flex items-center space-x-3 text-gray-400">
+                <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] flex items-center justify-center">
+                  <span className="text-white text-sm">✓</span>
+                </div>
+                <span>{feature}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
     </div>
   );
 };
-
-
-
-
 
 
 const ZapIcon: React.FC = () => (
@@ -277,7 +270,10 @@ const SearchIcon = () => (
 
 const HeroWithWallet: React.FC = () => {
   const endpoint = clusterApiUrl('devnet');
-  const wallets = [new PhantomWalletAdapter()];
+  const wallets = [
+    new PhantomWalletAdapter(),
+    new SolflareWalletAdapter()
+  ];
 
   return (
     <ConnectionProvider endpoint={endpoint}>
@@ -290,37 +286,32 @@ const HeroWithWallet: React.FC = () => {
   );
 };
 
-
-
-
-
 const Hero: React.FC = () => {
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(true);
+  const { connected } = useWallet();
+  const [isComingSoonModalOpen, setIsComingSoonModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('trending');
   const [selectedFreelancer, setSelectedFreelancer] = useState<Freelancer | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isWalletModalOpen, setIsWalletModalOpen] = useState(true);
-  const { connected } = useWallet();
+  //const [isWalletModalOpen, setIsWalletModalOpen] = useState(true);
+ // const { connected } = useWallet();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
 
 
   useEffect(() => {
-    // Short delay to ensure modal appears after page load
+    // Show coming soon modal after a delay
     const timer = setTimeout(() => {
-      setIsModalOpen(true);
+      setIsComingSoonModalOpen(true);
     }, 500);
 
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCloseModal = useCallback(() => {
-    setIsModalOpen(false);
-  }, []);
-
-
   useEffect(() => {
-    if (!connected) {
-      setIsWalletModalOpen(true);
+    // Only close wallet modal if connected
+    if (connected) {
+      setIsWalletModalOpen(false);
     }
   }, [connected]);
 
@@ -567,7 +558,7 @@ const Hero: React.FC = () => {
           )}
         </main>
       ) : (
-        <div className="container mx-auto px-4 pt-20 text-center">
+<div className="container mx-auto px-4 pt-20 text-center">
           <div className="max-w-2xl mx-auto">
             <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#8B5CF6] to-[#7C3AED] text-transparent bg-clip-text">
               Welcome to Soleer Marketplace
@@ -581,19 +572,15 @@ const Hero: React.FC = () => {
           </div>
         </div>
       )}
-      <FreelancerProfileModal
-        isOpen={!!selectedFreelancer}
-        onClose={() => setSelectedFreelancer(null)}
-        freelancer={selectedFreelancer}
-      />
 
+
+      
       <Footer />
-      {isModalOpen && (
-  <ComingSoonModal 
-    isOpen={isModalOpen}
-  />
-)}
-     
+      {isComingSoonModalOpen && (
+        <ComingSoonModal 
+          isOpen={isComingSoonModalOpen}
+        />
+      )}
     </div>
   );
 };
