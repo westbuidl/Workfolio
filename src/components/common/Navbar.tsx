@@ -123,13 +123,13 @@ const Navbar: React.FC<NavbarProps> = ({ navItems, title, description }) => {
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
-        <link rel="icon" href="/images/favicon.ico" />
+        <link rel="icon" href="/images/favicon.png" />
       </Head>
       <nav className="relative">
         <div className="flex justify-between items-center p-4 bg-black bg-opacity-30 backdrop-blur-sm">
           <Link href="/" className="flex items-center">
-            <Image src="/images/Soleer.png" alt="Soleer logo" width={32} height={32} className="mr-2" />
-            <span className="text-2xl font-bold text-white">Soleer</span>
+            <Image src="/images/favicon.png" alt="CinthPay logo" width={32} height={32} className="mr-2" />
+            <span className="text-2xl font-bold text-white">CinthPay</span>
           </Link>
 
           <ul className="hidden md:flex space-x-6">

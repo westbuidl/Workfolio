@@ -3,11 +3,11 @@ import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 
 export const metadata: Metadata = {
-  title: "Soleer",
-  description: "Soleer | is the first peer-to-peer services marketplace on Solana",
+  title: "CinthPay",
+  description: "CinthPay | Send money from the UK to Nigeria with confidence. Whether you're supporting loved ones, paying bills, or managing business transactions, CinthPay delivers your funds quickly and securely.",
   icons: {
     icon: [
-      { url: '../images/favicon.ico' },
+      { url: '../images/favicon.png' },
       { url: '/icon?<generated>', type: 'image/png' }
     ],
     shortcut: ['/shortcut-icon?<generated>'],

@@ -1,119 +1,158 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
-const Hero: React.FC = () => {
-  const [fromCurrency, setFromCurrency] = useState('GBP');
-  const [toCurrency, setToCurrency] = useState('NGN');
-  const [amount, setAmount] = useState('400.56');
+const FuturisticConstruction: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [progress, setProgress] = useState(0);
+  const [currentGlow, setCurrentGlow] = useState(0);
+  const glowColors = ['#00FFFF', '#7B68EE', '#9400D3'];
+
+  // Simulate construction progress
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress(prev => prev < 75 ? prev + 0.2 : prev);
+    }, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  // Cycle through glow colors for futuristic effect
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentGlow(prev => (prev + 1) % glowColors.length);
+    }, 3000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    alert(`Thank you! We'll notify ${email} when CinthPay launches.`);
+    setEmail('');
+  };
 
   return (
-    <div className="min-h-screen bg-white relative">
-      <div className="absolute inset-0 bg-[url('/gradient-bg.png')] bg-no-repeat bg-cover opacity-40" />
+    <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Background grid pattern */}
+      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
       
-      <div className="container mx-auto px-4 py-12 grid md:grid-cols-2 gap-12 items-center relative z-10">
-        <div>
-          <div className="flex items-center mb-4">
-            <img src="/uk-flag.png" alt="UK Flag" className="w-6 h-4 mr-2" />
-            <img src="/turkey-flag.png" alt="Turkey Flag" className="w-6 h-4 mr-2" />
-            <img src="/nigeria-flag.png" alt="Nigeria Flag" className="w-6 h-4 mr-2" />
-            <span className="text-gray-600 text-sm">Payments From the UK, Turkey, Nigeria →</span>
+      {/* Animated glowing orbs */}
+      <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full" 
+        style={{
+          background: `radial-gradient(circle, ${glowColors[currentGlow]} 0%, rgba(0,0,0,0) 70%)`,
+          filter: 'blur(30px)',
+          opacity: 0.6,
+          animation: 'float 15s infinite ease-in-out'
+        }}></div>
+      <div className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full" 
+        style={{
+          background: `radial-gradient(circle, ${glowColors[(currentGlow+1) % 3]} 0%, rgba(0,0,0,0) 70%)`,
+          filter: 'blur(40px)',
+          opacity: 0.5,
+          animation: 'float 20s infinite ease-in-out reverse'
+        }}></div>
+      
+      <div className="container mx-auto px-4 py-16 relative z-10">
+        <div className="max-w-3xl mx-auto text-center">
+          {/* Futuristic Logo */}
+          <div className="mb-8 inline-block">
+            <div className="text-5xl font-bold relative">
+              <Image src="/images/logo-cinthpay.png" alt="Wallet" width={160} height={160} />
+              <div className="absolute -inset-1 bg-cyan-500 opacity-20 blur-lg rounded-full"></div>
+            </div>
           </div>
           
-          <h1 className="text-5xl font-bold mb-4 text-[#0A2255]">
-            For Hassle-Free 
-            <span className="text-[#FF0000] block">International Money Transfers</span>
+          <h1 className="text-6xl font-extrabold mb-6 text-white leading-tight">
+          Fast, Secure, Affordable Remittances<br />
+
           </h1>
           
-          <p className="text-gray-600 mb-6 text-lg">
-            With Cinthpay, you can trust that your financial transactions are in safe hands, 
-            allowing you to focus on what truly matters. Join us today and discover a 
-            smarter way to manage your overseas finance.
+          <p className="text-gray-300 mb-10 text-xl leading-relaxed">
+          Send money from the UK to Nigeria with confidence. Whether you're supporting loved ones, paying bills, or managing business transactions, CinthPay delivers your funds quickly and securely.
           </p>
 
-          <div className="flex space-x-4 mb-6">
-            <img src="/google-play.png" alt="Google Play" className="h-12" />
-            <img src="/app-store.png" alt="App Store" className="h-12" />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <div className="flex -space-x-2">
-              {[1,2,3,4,5].map((_, index) => (
-                <img 
-                  key={index} 
-                  src={`/avatar-${index + 1}.png`} 
-                  alt="User" 
-                  className="w-8 h-8 rounded-full border-2 border-white" 
-                />
-              ))}
+          {/* Progress Bar */}
+          <div className="mb-12">
+            <div className="flex justify-between text-sm text-gray-400 mb-2">
+              <span>Development Progress</span>
+              <span>{Math.round(progress)}%</span>
             </div>
-            <div>
-              <div className="flex text-yellow-500">★★★★★</div>
-              <p className="text-sm text-gray-600">loved by 10.7k customers</p>
+            <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gradient-to-r from-cyan-400 to-purple-600 transition-all duration-1000 ease-out"
+                style={{ width: `${progress}%` }}
+              ></div>
             </div>
           </div>
-        </div>
 
-        <div className="bg-white shadow-lg rounded-2xl p-6 border">
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Send money</label>
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <select 
-                  value={fromCurrency}
-                  onChange={(e) => setFromCurrency(e.target.value)}
-                  className="appearance-none border rounded-lg p-3 pr-8 w-full"
-                >
-                  <option value="GBP">🇬🇧 GBP</option>
-                  <option value="TRY">🇹🇷 TRY</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  ▼
-                </div>
-              </div>
+          {/* Notification Form */}
+          <form onSubmit={handleSubmit} className="mb-12">
+            <div className="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
               <input 
-                type="text" 
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                className="border rounded-lg p-3 flex-grow text-right"
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                className="flex-1 bg-gray-900 border border-gray-700 text-white rounded-lg px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-500"
               />
+              <button 
+                type="submit"
+                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white px-6 py-4 rounded-lg font-medium transition-all duration-300 shadow-lg shadow-cyan-500/20"
+              >
+                Notify Me
+              </button>
             </div>
-          </div>
+          </form>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Receive</label>
-            <div className="flex items-center space-x-2">
-              <div className="relative">
-                <select 
-                  value={toCurrency}
-                  onChange={(e) => setToCurrency(e.target.value)}
-                  className="appearance-none border rounded-lg p-3 pr-8 w-full"
-                >
-                  <option value="NGN">🇳🇬 NGN</option>
-                </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  ▼
-                </div>
+          {/* Feature Highlights */}
+          <div className="grid md:grid-cols-3 gap-8 mt-16">
+            {[
+              { 
+                title: "Fast Transfers", 
+                description: "Send money in minutes with same-day or next-day delivery options",
+                icon: "🔄"
+              },
+              { 
+                title: "Low Fees", 
+                description: "Enjoy competitive rates with no hidden charges—what you see is what you send.",
+                icon: "📈"
+              },
+              { 
+                title: "Secure Transactions", 
+                description: "Your peace of mind matters. We use industry-leading encryption to protect every transfer.",
+                icon: "🔐"
+              }
+            ].map((feature, index) => (
+              <div 
+                key={index} 
+                className="bg-gray-900 bg-opacity-50 backdrop-blur-lg p-6 rounded-xl border border-gray-800 hover:border-cyan-500/50 transition-all duration-300"
+              >
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
+                <p className="text-gray-400">{feature.description}</p>
               </div>
-              <input 
-                type="text" 
-                value="0.00"
-                readOnly
-                className="border rounded-lg p-3 flex-grow text-right bg-gray-100"
-              />
-            </div>
+            ))}
           </div>
 
-          <div className="text-sm text-gray-600 mb-4 text-right">
-            Balance: 12.56
+          {/* Footer */}
+          <div className="mt-20 text-gray-500 text-sm">
+            <p>© 2025 CinthPay Fast, Secure, Affordable.</p>
           </div>
-
-          <button className="w-full bg-[#0A2255] text-white py-3 rounded-lg hover:bg-blue-900 text-lg font-semibold">
-            Send Money
-          </button>
         </div>
       </div>
+
+      {/* CSS for floating animation */}
+      <style jsx>{`
+        @keyframes float {
+          0% { transform: translateY(0px) translateX(0px); }
+          50% { transform: translateY(-20px) translateX(10px); }
+          100% { transform: translateY(0px) translateX(0px); }
+        }
+      `}</style>
     </div>
   );
 };
 
-export default Hero;
+export default FuturisticConstruction;

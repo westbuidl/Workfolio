@@ -11,8 +11,7 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <SkillsSection />
-      <Footer />
+     
      
     </div>
   );

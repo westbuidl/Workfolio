@@ -4,8 +4,8 @@ import Navbar from "@/components/common/Navbar";
 
 
 export const metadata: Metadata = {
-  title: "Soleer",
-  description: "Soleer | is the first peer-to-peer services marketplace on Solana",
+  title: "CinthPay",
+  description: "CinthPay",
 };
 
 export default function RootLayout({
@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <title>Soleer</title>
+      <title>CinthPay</title>
       <body>
 
         {children}
