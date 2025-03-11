@@ -44,7 +44,7 @@ const FeaturesSection = () => {
   ];
 
   // Helper function to render the appropriate icon
-  const renderIcon = (iconName) => {
+  const renderIcon = (iconName: string) => {
     switch (iconName) {
       case 'fast-transfer':
         return (
