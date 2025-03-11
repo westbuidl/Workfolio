@@ -1,158 +1,148 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 
-const FuturisticConstruction: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [progress, setProgress] = useState(0);
-  const [currentGlow, setCurrentGlow] = useState(0);
-  const glowColors = ['#00FFFF', '#7B68EE', '#9400D3'];
-
-  // Simulate construction progress
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress(prev => prev < 75 ? prev + 0.2 : prev);
-    }, 1000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  // Cycle through glow colors for futuristic effect
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentGlow(prev => (prev + 1) % glowColors.length);
-    }, 3000);
-    
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert(`Thank you! We'll notify ${email} when CinthPay launches.`);
-    setEmail('');
-  };
+const CinthPay = () => {
+  const [mobileDonate, setMobileDonate] = useState(false);
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Background grid pattern */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-20"></div>
+    <div className="min-h-screen bg-white flex flex-col">
+      {/* Navbar */}
+      <nav className="w-full py-5 px-6 md:px-12 flex justify-between items-center">
+        <div className="flex items-center">
+          <Image src="/images/logo.png" alt="CinthPay Logo" width={150} height={40} />
+        </div>
+        <div className="hidden md:flex items-center space-x-8">
+          <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">About us</a>
+          <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Contact us</a>
+          <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Faq</a>
+        </div>
+        <a href="#" className="hidden md:flex items-center space-x-2 bg-gray-100 rounded-lg px-4 py-2">
+          <Image src="/images/logo.png" alt="Apple" width={20} height={20} />
+          <Image src="/images/background/app-store-badge.png" alt="Google Play" width={20} height={20} />
+          <span className="font-medium">Get the App</span>
+        </a>
+        {/* Mobile menu button */}
+        <button className="md:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </nav>
       
-      {/* Animated glowing orbs */}
-      <div className="absolute top-1/4 left-1/4 w-64 h-64 rounded-full" 
-        style={{
-          background: `radial-gradient(circle, ${glowColors[currentGlow]} 0%, rgba(0,0,0,0) 70%)`,
-          filter: 'blur(30px)',
-          opacity: 0.6,
-          animation: 'float 15s infinite ease-in-out'
-        }}></div>
-      <div className="absolute bottom-1/3 right-1/4 w-80 h-80 rounded-full" 
-        style={{
-          background: `radial-gradient(circle, ${glowColors[(currentGlow+1) % 3]} 0%, rgba(0,0,0,0) 70%)`,
-          filter: 'blur(40px)',
-          opacity: 0.5,
-          animation: 'float 20s infinite ease-in-out reverse'
-        }}></div>
-      
-      <div className="container mx-auto px-4 py-16 relative z-10">
-        <div className="max-w-3xl mx-auto text-center">
-          {/* Futuristic Logo */}
-          <div className="mb-8 inline-block">
-            <div className="text-5xl font-bold relative">
-              <Image src="/images/logo-cinthpay.png" alt="Wallet" width={160} height={160} />
-              <div className="absolute -inset-1 bg-cyan-500 opacity-20 blur-lg rounded-full"></div>
-            </div>
-          </div>
-          
-          <h1 className="text-6xl font-extrabold mb-6 text-white leading-tight">
-          Fast, Secure, Affordable Remittances<br />
-
+      {/* Hero Section */}
+      <main className="flex-grow">
+        <div className="container mx-auto px-6 md:px-12 mt-12 md:mt-20 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-6">
+            <span className="text-navy-blue">Fast, </span>
+            <span className="text-red-600">Secure, </span>
+            <span className="text-red-600">Affordable</span>
+            <br />
+            <span className="text-navy-blue">Remittances</span>
           </h1>
           
-          <p className="text-gray-300 mb-10 text-xl leading-relaxed">
-          Send money from the UK to Nigeria with confidence. Whether you're supporting loved ones, paying bills, or managing business transactions, CinthPay delivers your funds quickly and securely.
+          <p className="text-gray-700 md:max-w-3xl mx-auto text-base md:text-lg mb-10 leading-relaxed">
+            Send money from the UK to Nigeria with confidence. Whether you're supporting loved ones, paying bills, or managing business transactions, CinthPay delivers your funds quickly and securely.
           </p>
-
-          {/* Progress Bar */}
-          <div className="mb-12">
-            <div className="flex justify-between text-sm text-gray-400 mb-2">
-              <span>Development Progress</span>
-              <span>{Math.round(progress)}%</span>
-            </div>
-            <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-cyan-400 to-purple-600 transition-all duration-1000 ease-out"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
+          
+          {/* App Store Buttons */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+            <a href="#" className="inline-block">
+              <Image src="/images/background/google-frame.png" alt="Get it on Google Play" width={180} height={53} />
+            </a>
+            <a href="#" className="inline-block">
+              <Image src="/images/background/appstore-frame.png" alt="Download on the App Store" width={180} height={53} />
+            </a>
           </div>
-
-          {/* Notification Form */}
-          <form onSubmit={handleSubmit} className="mb-12">
-            <div className="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
-              <input 
-                type="email" 
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                className="flex-1 bg-gray-900 border border-gray-700 text-white rounded-lg px-5 py-4 focus:outline-none focus:ring-2 focus:ring-cyan-500 placeholder-gray-500"
-              />
-              <button 
-                type="submit"
-                className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 text-white px-6 py-4 rounded-lg font-medium transition-all duration-300 shadow-lg shadow-cyan-500/20"
-              >
-                Notify Me
-              </button>
-            </div>
-          </form>
-
-          {/* Feature Highlights */}
-          <div className="grid md:grid-cols-3 gap-8 mt-16">
-            {[
-              { 
-                title: "Fast Transfers", 
-                description: "Send money in minutes with same-day or next-day delivery options",
-                icon: "🔄"
-              },
-              { 
-                title: "Low Fees", 
-                description: "Enjoy competitive rates with no hidden charges—what you see is what you send.",
-                icon: "📈"
-              },
-              { 
-                title: "Secure Transactions", 
-                description: "Your peace of mind matters. We use industry-leading encryption to protect every transfer.",
-                icon: "🔐"
-              }
-            ].map((feature, index) => (
-              <div 
-                key={index} 
-                className="bg-gray-900 bg-opacity-50 backdrop-blur-lg p-6 rounded-xl border border-gray-800 hover:border-cyan-500/50 transition-all duration-300"
-              >
-                <div className="text-4xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-                <p className="text-gray-400">{feature.description}</p>
+          
+          {/* Rating */}
+          <div className="flex flex-col items-center justify-center mb-12">
+            <div className="flex items-center mb-2">
+              <div className="flex space-x-1 mr-4">
+                <Image src="/images/user-avatar-1.png" alt="User" width={30} height={30} className="rounded-full" />
+                <Image src="/images/user-avatar-2.png" alt="User" width={30} height={30} className="rounded-full" />
+                <Image src="/images/user-avatar-3.png" alt="User" width={30} height={30} className="rounded-full" />
+                <Image src="/images/user-avatar-4.png" alt="User" width={30} height={30} className="rounded-full" />
               </div>
-            ))}
+              <div className="flex">
+                {[...Array(5)].map((_, i) => (
+                  <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                ))}
+              </div>
+            </div>
+            <p className="text-gray-700">loved by 10.7k customers</p>
           </div>
-
-          {/* Footer */}
-          <div className="mt-20 text-gray-500 text-sm">
-            <p>© 2025 CinthPay Fast, Secure, Affordable.</p>
+          
+          {/* App Screenshot */}
+          <div className="relative mx-auto max-w-4xl mb-12">
+            <Image 
+              src="/images/background/main-hero.png" 
+              alt="CinthPay App" 
+              width={800} 
+              height={500} 
+              className="mx-auto"
+            />
+            
+            {/* Floating panels */}
+            <div className="absolute top-1/4 left-0 md:-left-12 bg-white rounded-lg shadow-lg p-4 w-60 hidden md:block">
+              <h3 className="text-sm font-medium mb-2">Send money</h3>
+              <p className="text-xs text-gray-500 mb-1">You send</p>
+              <p className="text-xl font-bold mb-2">400.56</p>
+              <div className="flex justify-between items-center mb-2">
+                <span className="inline-flex items-center">
+                  <Image src="/images/background/gb-flag.png" alt="GB" width={20} height={20} className="mr-1" />
+                  <span className="text-xs">GBP</span>
+                </span>
+                <span className="text-xs text-gray-500">Balance: 12.56</span>
+              </div>
+              <div className="text-xs text-gray-500 mb-2">1 GBP = 2,010.00 NGN</div>
+              <hr className="mb-2" />
+              <p className="text-xs text-gray-500 mb-1">Receiver gets</p>
+              <p className="text-xl font-bold mb-2">0.00</p>
+              <div className="flex justify-between items-center">
+                <span className="inline-flex items-center">
+                  <Image src="/images/background/ng-flag.png" alt="NG" width={20} height={20} className="mr-1" />
+                  <span className="text-xs">NGN</span>
+                </span>
+              </div>
+            </div>
+            
+            <div className="absolute top-1/2 right-0 md:-right-12 bg-white rounded-lg shadow-lg p-4 w-60 hidden md:block">
+              <h3 className="text-sm font-medium mb-2">Swap currency</h3>
+              <p className="text-xs text-gray-500 mb-1">Swap from</p>
+              <p className="text-xl font-bold mb-2">400.56</p>
+              <div className="flex justify-between items-center mb-2">
+                <span className="inline-flex items-center">
+                  <Image src="/images/gb-flag.png" alt="GB" width={20} height={20} className="mr-1" />
+                  <span className="text-xs">GBP</span>
+                </span>
+                <span className="text-xs text-gray-500">Balance: 12.56</span>
+              </div>
+              <div className="text-xs text-gray-500 mb-2">1 GBP = 2,010.00 NGN</div>
+              <hr className="mb-2" />
+              <p className="text-xs text-gray-500 mb-1">Swap to</p>
+              <p className="text-xl font-bold mb-2">0.00</p>
+              <div className="flex justify-between items-center">
+                <span className="inline-flex items-center">
+                  <Image src="/images/background/ng-flag.png" alt="NG" width={20} height={20} className="mr-1" />
+                  <span className="text-xs">NGN</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* CSS for floating animation */}
-      <style jsx>{`
-        @keyframes float {
-          0% { transform: translateY(0px) translateX(0px); }
-          50% { transform: translateY(-20px) translateX(10px); }
-          100% { transform: translateY(0px) translateX(0px); }
-        }
-      `}</style>
+      </main>
+      
+      {/* Footer (if needed) */}
+      <footer className="w-full py-4 bg-white border-t border-gray-200">
+        <div className="container mx-auto px-6 md:px-12 text-center text-sm text-gray-600">
+          © 2025 CinthPay Fast, Secure, Affordable.
+        </div>
+      </footer>
     </div>
   );
 };
 
-export default FuturisticConstruction;
+export default CinthPay;

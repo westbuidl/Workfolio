@@ -1,170 +1,129 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
+import Image from 'next/image';
 
-interface FeatureCardProps {
-  title: string;
-  description: string;
-  icon: string;
-}
-
-const FeatureCard: React.FC<FeatureCardProps> = ({ title, description, icon }) => (
-  <div className="bg-[#111111] rounded-lg p-6 flex flex-col justify-between h-[400px] w-full sm:w-[380px] mx-2">
-    <div>
-      <h3 className="text-white text-2xl font-bold mb-2">{title}</h3>
-      <p className="text-gray-400">{description}</p>
-    </div>
-    <div className="mt-auto self-end">
-      <img src={icon} alt={title} className="w-32 h-32 sm:w-48 sm:h-48 object-contain" />
-    </div>
-  </div>
-);
-
-interface ArrowButtonProps {
-  direction: 'left' | 'right';
-  onClick: () => void;
-}
-
-const ArrowButton: React.FC<ArrowButtonProps> = ({ direction, onClick }) => (
-  <button className="bg-transparent" onClick={onClick}>
-    <img 
-      src={direction === 'left' ? "/images/icons/prev.png" : "/images/icons/next.png"}
-      alt={`${direction} arrow`}
-      className="w-10 h-10"
-    />
-  </button>
-);
-
-const WhyChooseSoleerSection: React.FC = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
-  const featuresRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const features: FeatureCardProps[] = [
+const FeaturesSection = () => {
+  const features = [
     {
-      title: "Ultra-low 2% transaction fees",
-      description: "",
-      icon: "/images/money-off.png"
+      id: 1,
+      title: "Fast Transfers",
+      description: "Send money in minutes with same-day or next-day delivery options",
+      icon: "fast-transfer",
+      bgColor: "bg-purple-100",
     },
     {
-      title: "Global accessibility",
-      description: "- work with anyone, anywhere",
-      icon: "/images/assistant-navigation.png"
+      id: 2,
+      title: "Low Fees",
+      description: "Enjoy competitive rates with no hidden charges—what you see is what you send.",
+      icon: "low-fees",
+      bgColor: "bg-orange-100",
     },
     {
-      title: "Censorship-resistant platform",
-      description: "",
-      icon: "/images/sync-lock.png"
+      id: 3,
+      title: "Secure Transactions",
+      description: "Your peace of mind matters. We use industry-leading encryption to protect every transfer.",
+      icon: "secure",
+      bgColor: "bg-green-100",
     },
     {
-      title: "Lightning-fast payments powered by Solana",
-      description: "",
-      icon: "/images/bolt.png"
+      id: 4,
+      title: "Real-Time Tracking",
+      description: "Stay updated with live notifications from the moment you send until your recipient receives.",
+      icon: "tracking",
+      bgColor: "bg-green-100",
+      fullWidth: true,
     },
     {
-      title: "Enhanced trust through blockchain transparency",
-      description: "",
-      icon: "/images/shield-lock.png"
-    },
-    {
-      title: "Flexible payment options with multiple tokens",
-      description: "",
-      icon: "/images/token-2.png"
+      id: 5,
+      title: "Flexible Options",
+      description: "Choose bank deposits, cash pickups, or mobile wallet transfers—whatever works best for you and your loved ones.",
+      icon: "bank",
+      bgColor: "bg-blue-100",
+      fullWidth: true,
     }
   ];
 
-  const scrollTo = (index: number) => {
-    if (featuresRef.current) {
-      const scrollWidth = featuresRef.current.scrollWidth;
-      const itemWidth = scrollWidth / features.length;
-      featuresRef.current.scrollTo({
-        left: itemWidth * index,
-        behavior: 'smooth'
-      });
+  // Helper function to render the appropriate icon
+  const renderIcon = (iconName) => {
+    switch (iconName) {
+      case 'fast-transfer':
+        return (
+          <div className="bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13 16L18 11L13 6" stroke="#6366F1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 16L11 11L6 6" stroke="#6366F1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        );
+      case 'low-fees':
+        return (
+          <div className="bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="8" stroke="#F97316" strokeWidth="2"/>
+              <path d="M15 9L9 15" stroke="#F97316" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
+        );
+      case 'secure':
+        return (
+          <div className="bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L20 7V13C20 17.4183 16.4183 21 12 21C7.58172 21 4 17.4183 4 13V7L12 3Z" stroke="#22C55E" strokeWidth="2"/>
+              <path d="M9 12L11 14L15 10" stroke="#22C55E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        );
+      case 'tracking':
+        return (
+          <div className="bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="9" stroke="#22C55E" strokeWidth="2"/>
+              <path d="M12 7V12L15 15" stroke="#22C55E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        );
+      case 'bank':
+        return (
+          <div className="bg-white rounded-full p-3 w-12 h-12 flex items-center justify-center">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 9H20L12 3L4 9Z" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M6 9V17" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M10 9V17" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M14 9V17" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M18 9V17" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M4 17H20" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+              <path d="M3 21H21" stroke="#3B82F6" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+          </div>
+        );
+      default:
+        return null;
     }
   };
-
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex > 0 ? prevIndex - 1 : features.length - 1;
-      scrollTo(newIndex);
-      return newIndex;
-    });
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) => {
-      const newIndex = prevIndex < features.length - 1 ? prevIndex + 1 : 0;
-      scrollTo(newIndex);
-      return newIndex;
-    });
-  };
-
-  useEffect(() => {
-    if (!isVisible) return;
-    
-    const interval = setInterval(() => {
-      handleNext();
-    }, 5000); // Change slide every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [isVisible]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-      }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
 
   return (
-    <div ref={sectionRef} id="why-soleer" className="bg-[#0A0A0A] text-white py-16 px-4 relative overflow-hidden">
-      <div 
-        className="absolute inset-0 bg-center bg-no-repeat bg-cover opacity-50"
-        style={{ backgroundImage: 'url("/images/Ellipse-why.png")' }}
-      ></div>
-      
-      <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex justify-between items-center mb-12">
-          <h2 className="text-4xl sm:text-5xl font-bold">Why Choose Soleer?</h2>
-          <div className="flex space-x-4">
-            <ArrowButton direction="left" onClick={handlePrev} />
-            <ArrowButton direction="right" onClick={handleNext} />
-          </div>
+    <section className="py-16 px-6 md:px-12 bg-white">
+      <div className="container mx-auto max-w-6xl">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Why Choose CinthPay?</h2>
+          <p className="text-xl text-gray-600">Your Trusted Partner for UK-to-Nigeria Transfers</p>
         </div>
-        <div 
-          ref={featuresRef}
-          className="flex flex-nowrap overflow-x-auto snap-x snap-mandatory -mx-2 scrollbar-hide"
-          style={{ scrollBehavior: 'smooth' }}
-        >
-          {features.map((feature, index) => (
-            <div key={index} className="flex-shrink-0 w-full sm:w-auto snap-center">
-              <FeatureCard {...feature} />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature) => (
+            <div 
+              key={feature.id} 
+              className={`${feature.bgColor} rounded-3xl p-8 ${feature.fullWidth ? 'md:col-span-2 lg:col-span-1' : ''}`}
+            >
+              {renderIcon(feature.icon)}
+              <h3 className="text-xl font-bold mt-6 mb-3 text-gray-900">{feature.title}</h3>
+              <p className="text-gray-700">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
-export default WhyChooseSoleerSection;
+export default FeaturesSection;
