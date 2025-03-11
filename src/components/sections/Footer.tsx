@@ -1,159 +1,176 @@
-"use client"
-
+"use client";
 import React from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
+import Link from 'next/link';
 
-interface FooterProps {
-  className?: string;
-}
+const FooterSection = () => {
+  const serviceLinks = [
+    { id: 1, title: "Money transfer", href: "#" },
+    { id: 2, title: "Swap currencies", href: "#" },
+    { id: 3, title: "Global accounts", href: "#" },
+  ];
 
-const Footer: React.FC<FooterProps> = ({ className }) => {
+  const supportLinks = [
+    { id: 1, title: "About us", href: "#" },
+    { id: 2, title: "FAQs", href: "#" },
+    { id: 3, title: "Contact us", href: "#" },
+  ];
+
+  const legalLinks = [
+    { id: 1, title: "Terms of Service", href: "#" },
+    { id: 2, title: "Privacy policy", href: "#" },
+    { id: 3, title: "Cookie Policy", href: "#" },
+    { id: 4, title: "Complaints Procedure", href: "#" },
+    { id: 5, title: "Anti-Money Laundering Policy", href: "#" },
+  ];
+
+  const socialLinks = [
+    { id: 1, name: "Facebook", href: "#", icon: "facebook" },
+    { id: 2, name: "Twitter", href: "#", icon: "twitter" },
+    { id: 3, name: "LinkedIn", href: "#", icon: "linkedin" },
+    { id: 4, name: "Instagram", href: "#", icon: "instagram" },
+  ];
+
+  const renderSocialIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'facebook':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+          </svg>
+        );
+      case 'twitter':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+          </svg>
+        );
+      case 'linkedin':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        );
+      case 'instagram':
+        return (
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <footer className={`bg-[#020202] text-white py-6 sm:py-8 md:py-12 lg:py-16 ${className || ''}`}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Main Grid Section */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
-          {/* Brand Section */}
-          <div className="col-span-2 sm:col-span-1 mb-8 sm:mb-0">
-            <div className="mb-4 sm:mb-6">
-              <Image
-                src="/images/Soleer.png"
-                alt="Soleer Logo"
-                width={120}
-                height={40}
-                className="object-contain w-24 sm:w-28 md:w-32"
-              />
-            </div>
-            <p className="text-sm text-gray-400 mb-3">
-              Soleer® is powered by Soleer Labs
-            </p>
-            <p className="text-sm text-gray-400 mb-4">
-              London, England
-            </p>
-            
-            {/* Social Media Links */}
-            <div className="flex items-center gap-4 mt-4">
-              <a 
-                href="https://twitter.com/soleerlabs" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-              >
-                <div className="relative w-6 h-6 sm:w-7 sm:h-7">
-                  <Image
-                    src="/images/socials/twitter.png"
-                    alt="Twitter"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </a>
-              <a 
-                href="https://t.me/+CjPcnbb0rR8zZTQ0" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:opacity-80 transition-opacity"
-              >
-                <div className="relative w-6 h-6 sm:w-7 sm:h-7">
-                  <Image
-                    src="/images/socials/telegram.png"
-                    alt="Telegram"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              </a>
-            </div>
-          </div>
-
-          {/* Navigation Links */}
-          <div className="col-span-1">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Navigation</h3>
-            <ul className="space-y-2 sm:space-y-3">
-              <li>
-                <Link href="/dashboard" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link href="/inbox" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Inbox
-                </Link>
-              </li>
-              <li>
-                <Link href="/profile" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Profile
-                </Link>
-              </li>
-              
-            </ul>
-          </div>
-
-          {/* Crypto Jobs */}
-          <div className="col-span-1">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Useful Links</h3>
-            <ul className="space-y-2 sm:space-y-3">
-            <li>
-                <Link href="https://docs.soleer.xyz" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Technical Documentation
-                </Link>
-              </li>
-              <li>
-                <Link href="https://soleer.xyz" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Soleer Home
-                </Link>
-              </li>
-              <li>
-                <Link href="https://app.soleer.xyz" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Marketplace
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Quick Links */}
-          <div className="col-span-2 sm:col-span-1">
-            <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Quick Links</h3>
-            <ul className="space-y-2 sm:space-y-3">
-              <li>
-              <Link href="/faq" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  FAQ
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy-policy" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms-of-service" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Terms of service
-                </Link>
-              </li>
-              <li>
-                <Link href="/data-safety" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Data Safety
-                </Link>
-              </li>
-              <li>
-                <Link href="/quality-guide" className="text-xs sm:text-sm text-gray-400 hover:text-gray-300 transition-colors inline-block">
-                  Quality Guide
-                </Link>
-              </li>
-            </ul>
+    <footer className="bg-white">
+      {/* Newsletter Section */}
+      <div className="py-16 px-6 md:px-12 border-b">
+        <div className="container mx-auto max-w-6xl text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-gray-900">
+            Stay updated with Cinthpay by<br />signing up for our newsletter
+          </h2>
+          
+          <div className="flex flex-col sm:flex-row max-w-xl mx-auto gap-4">
+            <input
+              type="email"
+              placeholder="Email address"
+              className="flex-grow py-3 px-4 bg-gray-100 rounded-lg text-gray-900"
+            />
+            <button className="bg-blue-900 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-800 transition-colors">
+              Get started
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Bottom Section */}
-        <div className="mt-8 sm:mt-10 md:mt-12 pt-6 sm:pt-8 border-t border-gray-800">
-          <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+      {/* Footer Links */}
+      <div className="py-12 px-6 md:px-12">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {/* Logo Column */}
             <div>
-              <p className="text-xs sm:text-sm text-gray-400 text-center sm:text-left">
-                © Soleer 2024 All rights reserved
-              </p>
+              <div className="mb-6">
+                <Link href="/">
+                  <div className="flex items-center">
+                    <div className="h-10 w-10 bg-red-500 rounded-full mr-2"></div>
+                    <span className="text-2xl font-bold text-blue-900">CinthPay</span>
+                  </div>
+                </Link>
+              </div>
             </div>
-            
+
+            {/* Services Column */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Services</h3>
+              <ul className="space-y-3">
+                {serviceLinks.map((link) => (
+                  <li key={link.id}>
+                    <Link href={link.href} className="text-gray-700 hover:text-blue-900">
+                      {link.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support Column */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Support</h3>
+              <ul className="space-y-3">
+                {supportLinks.map((link) => (
+                  <li key={link.id}>
+                    <Link href={link.href} className="text-gray-700 hover:text-blue-900">
+                      {link.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Legal Column */}
+            <div>
+              <h3 className="font-bold text-lg mb-4">Legal</h3>
+              <ul className="space-y-3">
+                {legalLinks.map((link) => (
+                  <li key={link.id}>
+                    <Link href={link.href} className="text-gray-700 hover:text-blue-900">
+                      {link.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Footer */}
+      <div className="py-6 px-6 md:px-12 border-t">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-6 text-sm text-gray-600">
+            <p className="mb-4">
+              All trademarks and brand names featured on this website belong to their respective owners. The use of these trademarks and brand names does not imply endorsement by or association with CinthPay.
+            </p>
+            <p>©2024 Cinthpay. All rights reserved</p>
+          </div>
+
+          {/* Social Icons */}
+          <div className="flex justify-center space-x-4">
+            {socialLinks.map((social) => (
+              <Link 
+                key={social.id} 
+                href={social.href}
+                className="w-10 h-10 rounded-full border border-gray-300 flex items-center justify-center text-gray-600 hover:text-blue-900 hover:border-blue-900 transition-colors"
+                aria-label={social.name}
+              >
+                {renderSocialIcon(social.icon)}
+              </Link>
+            ))}
           </div>
         </div>
       </div>
@@ -161,4 +178,4 @@ const Footer: React.FC<FooterProps> = ({ className }) => {
   );
 };
 
-export default Footer;
+export default FooterSection;

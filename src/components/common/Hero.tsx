@@ -136,11 +136,7 @@ const CinthPay = () => {
       </main>
       
       {/* Footer (if needed) */}
-      <footer className="w-full py-4 bg-white border-t border-gray-200">
-        <div className="container mx-auto px-6 md:px-12 text-center text-sm text-gray-600">
-          © 2025 CinthPay Fast, Secure, Affordable.
-        </div>
-      </footer>
+      
     </div>
   );
 };

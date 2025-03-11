@@ -12,7 +12,8 @@ export default function Home() {
     <div>
       <Hero />
      <WhySection/>
-     
+     <HowItWorksSection/>
+     <Footer/>
     </div>
   );
 }
