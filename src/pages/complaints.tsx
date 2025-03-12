@@ -4,9 +4,31 @@ import Image from 'next/image';
 import Footer from "@/components/sections/Footer";
 import "../app/globals.css";
 import Navbar from '@/components/common/Navbar';
+import Head from 'next/head';
 
 const ComplaintsPage = () => {
   return (
+    <>
+    <Head>
+    <title>CinthPay Complaints Procedure | UK to Nigeria Money Transfer Resolution</title>
+  <meta charSet="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="CinthPay's complaint resolution process ensures any issues with your UK to Nigeria money transfers are addressed promptly and effectively."/>
+  <meta name="keywords" content="CinthPay complaints, money transfer resolution, UK to Nigeria transfer issues, customer support"/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:title" content="CinthPay Complaints Procedure"/>
+  <meta property="og:description" content="Learn how CinthPay handles and resolves issues with UK to Nigeria money transfers to ensure excellent customer service."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.cinthpay.money/complaints/"/>
+  <meta property="og:image" content="https://www.cinthpay.money/images/cinthpay-social.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://www.cinthpay.money/complaints/"/>
+  <link rel="icon" href="/images/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+  </Head>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Navigation Header */}
       <Navbar 
@@ -31,7 +53,7 @@ const ComplaintsPage = () => {
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4">1. How to Complain</h2>
             <ul className="list-disc pl-5 space-y-2">
-              <li>Contact Us: Email complaints@cinthpay.com, call +44 20 1234 5678, or write to:</li>
+              <li>Contact Us: Email complaints@cinthpay.money, call +44 20 1234 5678, or write to:</li>
                 <li>CinthPay Limited, Slough Berkshire, United Kingdom.</li>
                <li>Details: Include your name, transaction ID (if applicable), and a description of the issue.</li>
             </ul>
@@ -62,7 +84,7 @@ const ComplaintsPage = () => {
           <div className="mb-8">
             <h2 className="text-xl font-bold mb-4">4. Contact Us</h2>
             <ul className="list-disc pl-5 space-y-2">
-              <li>For assistance, email complaints@cinthpay.com.</li>
+              <li>For assistance, email complaints@cinthpay.money.</li>
             </ul>
           </div>
 
@@ -83,6 +105,7 @@ const ComplaintsPage = () => {
       {/* Footer */}
      <Footer />
     </div>
+    </>
   );
 };
 

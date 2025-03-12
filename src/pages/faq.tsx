@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Footer from "@/components/sections/Footer";
 import "../app/globals.css";
 import Navbar from '@/components/common/Navbar';
+import Head from 'next/head';
 
 // Define types for FAQ data
 interface FaqItemData {
@@ -151,12 +152,30 @@ const FaqPage = () => {
   };
 
   return (
+    <>
+    <Head>
+    <title>CinthPay FAQ - Common Questions About UK to Nigeria Money Transfers</title>
+  <meta charSet="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Find answers to frequently asked questions about CinthPay's money transfer services from UK to Nigeria, including fees, transfer times, and security measures."/>
+  <meta name="keywords" content="CinthPay FAQ, money transfer questions, UK to Nigeria remittance help, international payment support"/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:title" content="CinthPay FAQ - UK to Nigeria Money Transfer Questions"/>
+  <meta property="og:description" content="Get answers to common questions about sending money from the UK to Nigeria with CinthPay's secure and fast transfer service."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.cinthpay.money/faq/"/>
+  <meta property="og:image" content="https://www.cinthpay.money/images/cinthpay-social.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://www.cinthpay.money/faq/"/>
+  <link rel="icon" href="/images/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+  </Head>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Navigation Header */}
-      <Navbar 
-        title="CinthPay"
-        description="Send money to Nigeria quickly and securely"
-      />
+      <Navbar />
 
       {/* Hero Section */}
       <section className="py-12 bg-blue-900 text-white rounded-3xl text-center mb-12">
@@ -262,6 +281,7 @@ const FaqPage = () => {
 
       <Footer />
     </div>
+    </>
   );
 };
 

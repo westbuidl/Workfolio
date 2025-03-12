@@ -2,7 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/complaints": "pages/complaints.js",
   "/about": "pages/about.js",
-  "/contact": "pages/contact.js"
+  "/privacy": "pages/privacy.js"
 }

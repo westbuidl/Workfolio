@@ -3,20 +3,39 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import Navbar from './Navbar';
+import Head from 'next/head';
 
 const CinthPay = () => {
   const [mobileDonate, setMobileDonate] = useState(false);
 
   return (
+    <>
+    <Head>
+    <title>CinthPay - Fast & Secure UK to Nigeria Money Transfers | Support Family & Business</title>
+  <meta charSet="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CinthPay offers secure, fast money transfers from UK to Nigeria. Support loved ones, pay bills, and manage business transactions with competitive rates and reliable service." />
+  <meta name="keywords" content="money transfer UK to Nigeria, remittance, international payments, send money to Nigeria, UK to Nigeria transfer" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:title" content="CinthPay - Fast & Secure UK to Nigeria Money Transfers" />
+  <meta property="og:description" content="Send money from the UK to Nigeria quickly and securely with CinthPay. Support loved ones and manage business payments with confidence." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.cinthpay.money/" />
+  <meta property="og:image" content="https://www.cinthpay.com/images/cinthpay-social.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="canonical" href="https://www.cinthpay.money/" />
+  <link rel="icon" href="/images/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  </Head>
     <div className="min-h-screen bg-white flex flex-col">
       {/* Navbar */}
 
 
-<Navbar 
-  title="AppName"
-  description="App description"
- // navItems={customNavItems}
-/>
+<Navbar/>
       
       {/* Hero Section */}
       <main className="flex-grow">
@@ -126,6 +145,7 @@ const CinthPay = () => {
       {/* Footer (if needed) */}
       
     </div>
+    </>
   );
 };
 

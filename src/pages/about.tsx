@@ -4,9 +4,31 @@ import Image from 'next/image';
 import Footer from "@/components/sections/Footer";
 import "../app/globals.css";
 import Navbar from '@/components/common/Navbar';
+import Head from 'next/head';
 
 const AboutPage = () => {
   return (
+    <>
+    <Head>
+    <title>About CinthPay | Trusted UK to Nigeria Money Transfer Service</title>
+  <meta charSet="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Learn about CinthPay's mission to provide secure, fast, and affordable money transfer services from the UK to Nigeria. Trusted by thousands of customers."/>
+  <meta name="keywords" content="about CinthPay, UK to Nigeria remittance, international money transfer, Nigerian diaspora, secure money transfer"/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:title" content="About CinthPay - UK to Nigeria Money Transfer Service"/>
+  <meta property="og:description" content="CinthPay is a trusted payment platform built to simplify remittances from the UK to Nigeria with competitive rates and secure transactions."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.cinthpay.com/about/"/>
+  <meta property="og:image" content="https://www.cinthpay.com/images/cinthpay-social.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://www.cinthpay.com/about/"/>
+  <link rel="icon" href="/images/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+  </Head>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Navigation Header */}
       <Navbar 
@@ -160,6 +182,7 @@ const AboutPage = () => {
       </section>
       <Footer />
     </div>
+    </>
   );
 };
 

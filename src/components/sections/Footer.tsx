@@ -17,11 +17,11 @@ const FooterSection = () => {
   ];
 
   const legalLinks = [
-    { id: 1, title: "Terms of Service", href: "/terms-of-service" },
-    { id: 2, title: "Privacy policy", href: "/privacy-policy" },
-    { id: 3, title: "Cookie Policy", href: "/cookie" },
+    { id: 1, title: "Terms of Service", href: "/terms" },
+    { id: 2, title: "Privacy policy", href: "/privacy" },
+    { id: 3, title: "Cookie Policy", href: "/cookie-policy" },
     { id: 4, title: "Complaints Procedure", href: "/complaints" },
-    { id: 5, title: "Anti-Money Laundering Policy", href: "/anti" },
+    { id: 5, title: "Anti-Money Laundering Policy", href: "/aml-policy" },
   ];
 
   const socialLinks = [

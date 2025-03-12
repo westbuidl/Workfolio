@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Footer from "@/components/sections/Footer";
 import "../app/globals.css";
 import Navbar from '@/components/common/Navbar';
+import Head from 'next/head';
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -27,6 +28,27 @@ const ContactPage = () => {
   };
 
   return (
+    <>
+    <Head>
+    <title>Contact CinthPay | UK to Nigeria Money Transfer Support</title>
+  <meta charSet="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Contact CinthPay for support with your UK to Nigeria money transfers. We're dedicated to keeping families and communities connected through reliable service."/>
+  <meta name="keywords" content="contact CinthPay, UK to Nigeria transfer support, money transfer help, remittance customer service"/>
+  <meta name="robots" content="index, follow"/>
+  <meta property="og:title" content="Contact CinthPay - UK to Nigeria Transfer Support"/>
+  <meta property="og:description" content="Reach out to CinthPay's customer support team for assistance with your UK to Nigeria money transfers and remittance services."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.cinthpay.money/contact/"/>
+  <meta property="og:image" content="https://www.cinthpay.money/images/cinthpay-social.jpg"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="canonical" href="https://www.cinthpay.money/contact/"/>
+  <link rel="icon" href="/images/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png"/>
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png"/>
+  <link rel="manifest" href="/site.webmanifest"/>
+  </Head>
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Navigation Header */}
       <Navbar 
@@ -121,6 +143,7 @@ const ContactPage = () => {
       </div>
       <Footer />
     </div>
+    </>
   );
 };
 
