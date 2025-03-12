@@ -21,7 +21,7 @@ const CinthPay = () => {
   <meta property="og:description" content="Send money from the UK to Nigeria quickly and securely with CinthPay. Support loved ones and manage business payments with confidence." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://www.cinthpay.money/" />
-  <meta property="og:image" content="https://www.cinthpay.com/images/cinthpay-social.jpg" />
+  <meta property="og:image" content="https://www.cinthpay.money/images/cinthpay-social.jpg" />
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="canonical" href="https://www.cinthpay.money/" />
   <link rel="icon" href="/images/favicon.ico" />
