@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import Navbar from './Navbar';
 
 const CinthPay = () => {
   const [mobileDonate, setMobileDonate] = useState(false);
@@ -8,27 +10,13 @@ const CinthPay = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Navbar */}
-      <nav className="w-full py-5 px-6 md:px-12 flex justify-between items-center">
-        <div className="flex items-center">
-          <Image src="/images/logo.png" alt="CinthPay Logo" width={150} height={40} />
-        </div>
-        <div className="hidden md:flex items-center space-x-8">
-          <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">About us</a>
-          <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Contact us</a>
-          <a href="#" className="text-gray-700 hover:text-gray-900 font-medium">Faq</a>
-        </div>
-        <a href="#" className="hidden md:flex items-center space-x-2 bg-gray-100 rounded-lg px-4 py-2">
-          <Image src="/images/logo.png" alt="Apple" width={20} height={20} />
-          <Image src="/images/background/app-store-badge.png" alt="Google Play" width={20} height={20} />
-          <span className="font-medium">Get the App</span>
-        </a>
-        {/* Mobile menu button */}
-        <button className="md:hidden">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-      </nav>
+
+
+<Navbar 
+  title="AppName"
+  description="App description"
+ // navItems={customNavItems}
+/>
       
       {/* Hero Section */}
       <main className="flex-grow">

@@ -1,11 +1,11 @@
 import Hero from "@/components/common/Hero";
 import Footer from "@/components/sections/Footer";
-import SkillsSection from "@/components/sections/SkillsSection";
+import RemittancesSection from "@/components/sections/RemittancesSection";
 import HowItWorksSection from "@/components/sections/HowItWorksSection";
 import WhySection from "@/components/sections/WhySection";
-import ExperienceSection from "@/components/sections/ExperienceSection";
+import CompetitiveRatesSection from "@/components/sections/CompetitiveRatesSection";
 import TokenSection from "@/components/sections/TokenSection";
-import RoadMapSection from "@/components/sections/RoadMapSection";
+import RoadMapSection from "@/components/sections/CompetitiveRatesSection";
 
 export default function Home() {
   return (
@@ -13,6 +13,8 @@ export default function Home() {
       <Hero />
      <WhySection/>
      <HowItWorksSection/>
+     <RemittancesSection/>
+     <CompetitiveRatesSection/>
      <Footer/>
     </div>
   );

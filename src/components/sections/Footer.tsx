@@ -11,17 +11,17 @@ const FooterSection = () => {
   ];
 
   const supportLinks = [
-    { id: 1, title: "About us", href: "#" },
-    { id: 2, title: "FAQs", href: "#" },
-    { id: 3, title: "Contact us", href: "#" },
+    { id: 1, title: "About us", href: "/about" },
+    { id: 2, title: "FAQs", href: "/faq" },
+    { id: 3, title: "Contact us", href: "/contact" },
   ];
 
   const legalLinks = [
-    { id: 1, title: "Terms of Service", href: "#" },
-    { id: 2, title: "Privacy policy", href: "#" },
-    { id: 3, title: "Cookie Policy", href: "#" },
-    { id: 4, title: "Complaints Procedure", href: "#" },
-    { id: 5, title: "Anti-Money Laundering Policy", href: "#" },
+    { id: 1, title: "Terms of Service", href: "/terms-of-service" },
+    { id: 2, title: "Privacy policy", href: "/privacy-policy" },
+    { id: 3, title: "Cookie Policy", href: "/cookie" },
+    { id: 4, title: "Complaints Procedure", href: "/complaints" },
+    { id: 5, title: "Anti-Money Laundering Policy", href: "/anti" },
   ];
 
   const socialLinks = [
@@ -97,9 +97,8 @@ const FooterSection = () => {
               <div className="mb-6">
                 <Link href="/">
                   <div className="flex items-center">
-                    <div className="h-10 w-10 bg-red-500 rounded-full mr-2"></div>
-                    <span className="text-2xl font-bold text-blue-900">CinthPay</span>
-                  </div>
+                            <Image src="/images/logo.png" alt="CinthPay Logo" width={150} height={40} />
+                          </div>
                 </Link>
               </div>
             </div>

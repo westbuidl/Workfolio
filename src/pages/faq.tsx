@@ -1,203 +1,268 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Image from 'next/image';
 import Footer from "@/components/sections/Footer";
-import Navbar from "@/components/common/Navbar";
 import "../app/globals.css";
+import Navbar from '@/components/common/Navbar';
 
-interface FAQItem {
+// Define types for FAQ data
+interface FaqItemData {
   question: string;
-  answer: string;
+  answer: string | string[];
 }
 
-const FAQSection: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-  const [displayText, setDisplayText] = useState("");
-  const fullText = "We're sure you have some questions...";
-  const [isTypingComplete, setIsTypingComplete] = useState(false);
+interface FaqSections {
+  general: FaqItemData[];
+  sending: FaqItemData[];
+  receiving: FaqItemData[];
+  troubleshooting: FaqItemData[];
+  account: FaqItemData[];
+}
 
-  const navItems = [
-    { title: 'DASHBOARD', href: '../dashboard' },
-    { title: 'INBOX', href: '../inbox' },
-    { title: 'PROFILE', href: '../profile' },
-    { title: 'MARKETPLACE', href: '/' },
-    { title: 'SOLEER HOME', href: 'soleer.xyz' },
-    { title: 'FAQ', href: '../faq' },
-  ];
+// Define props for FaqItem component
+interface FaqItemProps {
+  question: string;
+  answer: string | string[];
+  index: string;
+  isOpen: boolean;
+  toggle: (index: string) => void;
+}
 
-  // Typing effect
-  useEffect(() => {
-    let currentIndex = 0;
-    setIsTypingComplete(false);
+const FaqPage = () => {
+  const [openQuestion, setOpenQuestion] = useState<string | null>(null);
 
-    const typingInterval = setInterval(() => {
-      if (currentIndex <= fullText.length) {
-        setDisplayText(fullText.slice(0, currentIndex));
-        currentIndex++;
-      } else {
-        setIsTypingComplete(true);
-        clearInterval(typingInterval);
-      }
-    }, 50);
-
-    return () => clearInterval(typingInterval);
-  }, []);
-
-  const faqData: FAQItem[] = [
-    {
-      question: "What is Soleer?",
-      answer: "Soleer is the first peer-to-peer (P2P) service marketplace built on the Solana blockchain. It connects freelancers and clients, enabling them to transact services in a fast, transparent, and cost-effective manner using blockchain technology"
-    },
-    {
-      question: "How does Soleer work?",
-      answer: "Soleer operates as a decentralized marketplace where Freelancers (Service Providers) offer services, create listings, and receive payments in cryptocurrency.<br /><br />Clients can browse, hire freelancers, and make payments using Soleer's escrow system, which ensures secure transactions.<br /><br />All interactions are secured via smart contracts, ensuring that payments are only released once both parties are satisfied."
-    },
-    {
-      question: "What is the benefit of using Soleer over traditional platforms?",
-      answer: "Low Fees: Transactions on Soleer incur significantly lower fees than traditional freelance platforms, thanks to Solana's low-cost blockchain.<br /><br />Speed: Solana processes up to 65,000 transactions per second, ensuring fast and efficient interactions.<br /><br />Transparency: All transactions and user reputations are stored on the blockchain, making them verifiable and immutable.<br /><br />Security: Smart contracts ensure payments are held in escrow until the work is completed, offering protection for both freelancers and clients.<br /><br />Decentralization: Soleer eliminates central authorities, reducing the risk of censorship or unfair practices."
-    },
-    {
-      question: "How do payments work on Soleer?",
-      answer: "All payments on Soleer are handled via cryptocurrency.<br /><br />When a client hires a freelancer, the agreed-upon payment is held in an escrow smart contract on the Solana blockchain. Once the freelancer delivers the work and the client approves it, the funds are released from escrow"
-    },
-    {
-      question: "What currencies can I use on Soleer?",
-      answer: "Soleer primarily uses Solana (SOL) for transactions, but additional cryptocurrency options may be supported as the platform evolves.<br /><br />You will need a compatible Solana wallet to engage in transactions."
-    },
-    {
-      question: "How does the reputation system work?",
-      answer: "Soleer's reputation system is based on user ratings and feedback, stored transparently on the blockchain.<br /><br />Freelancers are rated by clients based on the quality of work, communication, and adherence to deadlines.<br /><br />Similarly, clients are rated by freelancers for professionalism and timely payments.<br /><br />These ratings help users build trust and visibility on the platform."
-    },
-    {
-      question: "How do I resolve disputes?",
-      answer: "In case of a disagreement between a freelancer and a client, Soleer provides a dispute resolution mechanism:<br /><br />1. Direct Communication: Users are encouraged to resolve issues through direct dialogue.<br /><br />2. Escalation to Arbitration: If no agreement is reached, the dispute can be escalated, and smart contracts will enforce the agreed terms. Neutral third-party arbiters may be used to make a final decision.<br /><br />3. Smart Contracts: Payments held in escrow will only be released based on the resolution of the dispute."
-    },
-    {
-      question: "How do I create a profile on Soleer?",
-      answer: "To create a profile:<br /><br />1. Sign up on Soleer using your email address and link your Solana wallet.<br /><br />2. Complete your profile by providing relevant personal information, your skills, and portfolio if you are a freelancer.<br /><br />3. You're ready to start offering services or hiring talent on the platform!"
-    },
-    {
-      question: "How do I hire a freelancer on Soleer?",
-      answer: "1. Browse available freelancers or services through the platform's search functionality.<br /><br />2. Review their profile, past work, and ratings.<br /><br />3. Contact the freelancer to discuss your project details and agree on terms.<br /><br />4. Once agreed, deposit the payment into the escrow smart contract.<br /><br />5. Upon satisfactory completion, release the payment to the freelancer."
-    },
-    {
-      question: "How do I offer services as a freelancer on Soleer?",
-      answer: "1. Complete your profile and clearly define the services you offer.<br /><br />2. List your services with detailed descriptions, prices, and timelines.<br /><br />3. Respond to client inquiries and negotiate terms as needed.<br /><br />4. Once hired, deliver the agreed-upon services and receive payment upon the client's approval."
-    },
-    {
-      question: "What is escrow, and how does it work?",
-      answer: "Escrow is a secure payment mechanism where funds are held by a third-party (in this case, a smart contract on the blockchain) until both parties fulfill their agreement.<br /><br />On Soleer, client payments are held in escrow until the freelancer delivers the work and the client approves it."
-    },
-    {
-      question: "Can I cancel a project after hiring a freelancer?",
-      answer: "Yes, but only if both parties agree to cancel the project.<br /><br />If a freelancer has already started work, cancellation terms and refunds will depend on the terms agreed upon during the project's negotiation phase.<br /><br />In case of disputes, Soleer's dispute resolution process can be used."
-    },
-    {
-      question: "How do I protect myself from scams or low-quality work?",
-      answer: "Soleer's escrow system ensures that payments are not released until the work is completed and approved by the client.<br /><br />The platform's transparent reputation system also helps users assess the credibility and reliability of freelancers and clients before starting a project."
-    },
-    {
-      question: "How do I withdraw earnings as a freelancer?",
-      answer: "Once your client approves the work, the payment held in escrow will be released to your Solana wallet.<br /><br />From there, you can transfer your earnings to any supported cryptocurrency wallet or exchange."
-    },
-    {
-      question: "Is Soleer available worldwide?",
-      answer: "Yes, Soleer is a global platform. By using blockchain technology and cryptocurrency payments, freelancers and clients from anywhere in the world can transact without traditional banking limitations."
-    },
-    {
-      question: "How does Soleer ensure security?",
-      answer: "Blockchain Security: Transactions are secured on the Solana blockchain, ensuring transparency and immutability.<br /><br />Smart Contracts: All payments are managed by smart contracts, reducing the risk of fraud or payment disputes.<br /><br />Reputation System: The transparent, immutable reputation system helps identify trustworthy freelancers and clients."
-    },
-    {
-      question: "Can I use Soleer on mobile?",
-      answer: "Yes, Soleer can be accessed via mobile-friendly web interfaces.<br /><br />The platform will offer mobile apps as well for a better user experience on smartphones and tablets."
-    },
-    {
-      question: "How can I contact Soleer support?",
-      answer: "If you need assistance, you can reach out to our customer support team by emailing us at founder@soleer.xyz or through the help section on the platform."
+  const toggleQuestion = (index: string) => {
+    if (openQuestion === index) {
+      setOpenQuestion(null);
+    } else {
+      setOpenQuestion(index);
     }
-];
+  };
+  
+  const FaqItem: React.FC<FaqItemProps> = ({ question, answer, index, isOpen, toggle }) => {
+    return (
+      <div className="border-b border-gray-200 py-4">
+        <div 
+          className="flex justify-between items-center cursor-pointer" 
+          onClick={() => toggle(index)}
+        >
+          <h3 className="text-base font-medium text-gray-900">{question}</h3>
+          <button className="text-gray-400">
+            {isOpen ? (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"></path>
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            )}
+          </button>
+        </div>
+        {isOpen && (
+          <div className="mt-2 text-gray-700">
+            {Array.isArray(answer) ? (
+              <ul className="list-disc pl-5 space-y-1">
+                {answer.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>{answer}</p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
-  const toggleAccordion = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
+  // FAQ data organized by sections
+  const faqData: FaqSections = {
+    general: [
+      {
+        question: "What is CinthPay?",
+        answer: "CinthPay is a payment platform that allows you to send money from the UK to Nigeria quickly, securely, and affordably. We offer options like bank deposits, cash pickups, and mobile wallet transfers."
+      },
+      {
+        question: "Who can use CinthPay?",
+        answer: "Anyone over 18 and residing in the UK with a valid UK bank card or account can use our service."
+      },
+      {
+        question: "Is CinthPay safe?",
+        answer: "Yes! We're regulated by the UK Financial Conduct Authority (FCA) and use industry-standard encryption to protect your data and transactions."
+      }
+    ],
+    sending: [
+      {
+        question: "How long does it take to send money to Nigeria?",
+        answer: "Most transfers are completed within minutes to a day, depending on the delivery method (e.g., bank deposit, cash pickup, or mobile wallet)."
+      },
+      {
+        question: "What are the fees?",
+        answer: "Our fees are low and transparent. You'll see the exact cost, including exchange rates, before confirming your transfer. Use our price calculator to check rates."
+      },
+      {
+        question: "Can I cancel a transfer?",
+        answer: "Once processed, transfers cannot be canceled unless there's an error on our part. Contact us immediately at ask@cinthpay.money if you need assistance."
+      },
+      {
+        question: "What payment methods are accepted?",
+        answer: "We accept UK-issued debit/credit cards and bank transfers. The account or card must be in your name."
+      }
+    ],
+    receiving: [
+      {
+        question: "How can my recipient get the money?",
+        answer: [
+          "Bank Deposit: To major Nigerian banks like GTBank, First Bank, or Access Bank.",
+          "Cash Pickup: At thousands of locations across Nigeria.",
+          "Mobile Wallet: Directly to their phone for instant access."
+        ]
+      },
+      {
+        question: "Does my recipient need a CinthPay account?",
+        answer: "No, recipients don't need an account—just the details you provide during the transfer."
+      }
+    ],
+    troubleshooting: [
+      {
+        question: "What if my transfer is delayed?",
+        answer: "Delays are rare but can happen due to bank processing or verification checks. Contact us at ask@cinthpay.money with your transaction ID for help."
+      },
+      {
+        question: "How do I track my transfer?",
+        answer: "Use your account dashboard or mobile app to get real-time updates. We'll also send notifications via email or SMS."
+      }
+    ],
+    account: [
+      {
+        question: "How do I sign up?",
+        answer: "Create a free account online or via our app by providing your name, email, phone number, and address. You'll need to verify your identity too."
+      },
+      {
+        question: "What if I have a problem?",
+        answer: "Our support team is available 24/7. Reach us at ask@cinthpay.money, +44 20 1234 5678, or via live chat."
+      },
+      {
+        question: "Still have questions?",
+        answer: "Check our Help Center or get in touch—we're here to assist!"
+      }
+    ]
   };
 
   return (
-    <div className="bg-[#0A0A0A] min-h-screen relative">
-      {/* Background with gradient overlay */}
-      <div 
-        className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-90"
-        style={{
-          backgroundImage: 'url("/images/Ellipse-token.png")',
-          backgroundBlendMode: 'overlay'
-        }}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Navigation Header */}
+      <Navbar 
+        title="CinthPay"
+        description="Send money to Nigeria quickly and securely"
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0A0A0A] to-[#0A0A0A] opacity-90" />
 
-      {/* Content */}
-      <div className="relative z-10">
-        <div 
-          className="absolute inset-0 bg-center bg-cover bg-no-repeat opacity-90"
-          style={{
-            backgroundImage: 'url("/images/Ellipse-token.png")',
-            backgroundBlendMode: 'overlay'
-          }}
-        />
-        <Navbar 
-          navItems={navItems} 
-          title="Soleer Frequently Asked Questions" 
-          description="Find and hire top freelancers on the blockchain"
-        />
-        
-        <div className="max-w-4xl mx-auto py-16 px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-yellow-500 text-lg mb-2">FREQUENTLY ASKED QUESTIONS</h2>
-            <h1 className="text-white text-4xl sm:text-5xl font-bold min-h-[60px]">
-              {displayText}
-              {!isTypingComplete && <span className="animate-pulse">|</span>}
-            </h1>
+      {/* Hero Section */}
+      <section className="py-12 bg-blue-900 text-white rounded-3xl text-center mb-12">
+        <div className="max-w-3xl mx-auto px-4">
+          <div className="inline-block bg-white text-blue-900 font-bold px-4 py-1 rounded-full mb-6">
+            FAQ
           </div>
+          <h1 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h1>
+          <p className="text-lg opacity-90">
+            Have questions? We can answer some of the most commonly brought up ones
+            here to make it easy for you!
+          </p>
+        </div>
+      </section>
 
-          <div className="space-y-4">
-            {faqData.map((faq, index) => (
-              <div
+      {/* FAQ Sections */}
+      <div className="max-w-3xl mx-auto mb-20">
+        {/* General Questions */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">General Questions</h2>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {faqData.general.map((item, index) => (
+              <FaqItem 
                 key={index}
-                className="bg-[#111111]/80 backdrop-blur-sm rounded-lg overflow-hidden transition-all duration-300 border border-gray-800"
-              >
-                <button
-                  className="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-[#1a1a1a] transition-colors"
-                  onClick={() => toggleAccordion(index)}
-                >
-                  <span className="text-white font-medium">{faq.question}</span>
-                  <span className="text-white w-6 h-6 flex items-center justify-center">
-                    {openIndex === index ? (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    ) : (
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 5V19M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      </svg>
-                    )}
-                  </span>
-                </button>
-                <div
-                  className={`px-6 transition-all duration-300 overflow-hidden ${
-                    openIndex === index ? 'max-h-[1000px] py-4' : 'max-h-0'
-                  }`}
-                >
-                  <div 
-                    className="text-gray-400"
-                    dangerouslySetInnerHTML={{ __html: faq.answer }}
-                  />
-                </div>
-              </div>
+                question={item.question}
+                answer={item.answer}
+                index={`general-${index}`}
+                isOpen={openQuestion === `general-${index}`}
+                toggle={toggleQuestion}
+              />
             ))}
           </div>
-        </div>
-        <Footer />
+        </section>
+
+        {/* Sending Money */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Sending Money</h2>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {faqData.sending.map((item, index) => (
+              <FaqItem 
+                key={index}
+                question={item.question}
+                answer={item.answer}
+                index={`sending-${index}`}
+                isOpen={openQuestion === `sending-${index}`}
+                toggle={toggleQuestion}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Receiving Money */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Receiving Money</h2>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {faqData.receiving.map((item, index) => (
+              <FaqItem 
+                key={index}
+                question={item.question}
+                answer={item.answer}
+                index={`receiving-${index}`}
+                isOpen={openQuestion === `receiving-${index}`}
+                toggle={toggleQuestion}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Troubleshooting */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Troubleshooting</h2>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {faqData.troubleshooting.map((item, index) => (
+              <FaqItem 
+                key={index}
+                question={item.question}
+                answer={item.answer}
+                index={`troubleshooting-${index}`}
+                isOpen={openQuestion === `troubleshooting-${index}`}
+                toggle={toggleQuestion}
+              />
+            ))}
+          </div>
+        </section>
+
+        {/* Account & Support */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Account & Support</h2>
+          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+            {faqData.account.map((item, index) => (
+              <FaqItem 
+                key={index}
+                question={item.question}
+                answer={item.answer}
+                index={`account-${index}`}
+                isOpen={openQuestion === `account-${index}`}
+                toggle={toggleQuestion}
+              />
+            ))}
+          </div>
+        </section>
       </div>
+
+      <Footer />
     </div>
   );
 };
 
-export default FAQSection;
+export default FaqPage;
