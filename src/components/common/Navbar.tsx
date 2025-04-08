@@ -19,10 +19,10 @@ const Navbar: React.FC<NavbarProps> = ({
   navItems = [
     { title: 'About us', href: '/about' },
     { title: 'Contact us', href: '/contact' },
-    { title: 'Faq', href: '/faq' }
+    { title: 'FAQ', href: '/faq' }
   ],
-  title = 'CinthPay',
-  description = 'Secure blockchain payments'
+  title = 'CinthPay - Fast & Secure UK to Nigeria Money Transfers | Support Family & Business',
+  description = 'CinthPay offers secure, fast money transfers from UK to Nigeria. Support loved ones, pay bills, and manage business transactions with competitive rates and reliable service.'
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
