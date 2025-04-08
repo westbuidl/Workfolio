@@ -21,8 +21,8 @@ const Navbar: React.FC<NavbarProps> = ({
     { title: 'Contact us', href: '/contact' },
     { title: 'FAQ', href: '/faq' }
   ],
-  title = 'CinthPay - Fast & Secure UK to Nigeria Money Transfers | Support Family & Business',
-  description = 'CinthPay offers secure, fast money transfers from UK to Nigeria. Support loved ones, pay bills, and manage business transactions with competitive rates and reliable service.'
+  title = 'Hyacinth Afam Work Portfolio - Fast & Secure UK to Nigeria Money Transfers | Support Family & Business',
+  description = 'Hyacinth Afam Work Portfolio offers secure, fast money transfers from UK to Nigeria. Support loved ones, pay bills, and manage business transactions with competitive rates and reliable service.'
 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -39,7 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({
             <Link href="/" className="flex items-center">
               <Image 
                 src="/images/logo.png" 
-                alt="CinthPay logo" 
+                alt="Hyacinth Afam Work Portfolio logo" 
                 width={150} 
                 height={80} 
                 className="mr-2" 

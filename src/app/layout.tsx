@@ -3,8 +3,8 @@ import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 
 export const metadata: Metadata = {
-  title: "CinthPay",
-  description: "CinthPay | Send money from the UK to Nigeria with confidence. Whether you're supporting loved ones, paying bills, or managing business transactions, CinthPay delivers your funds quickly and securely.",
+  title: "Hyacinth Afam Work Portfolio",
+  description: "Hyacinth Afam Work Portfolio .",
   icons: {
     icon: [
       { url: '../images/favicon.png' },
