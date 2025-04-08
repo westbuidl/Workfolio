@@ -171,9 +171,9 @@ const DeveloperProfile = () => {
     bio: "Web developer with expertise in modern frontend frameworks and responsive design, focused on creating accessible and performant web experiences.",
     skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "UI/UX"],
     social: {
-      github: "https://github.com/alexjohnson",
-      linkedin: "https://linkedin.com/in/alexjohnson",
-      email: "alex.johnson@example.com"
+      github: "https://github.com/westbuidl",
+      linkedin: "https://linkedin.com/in/hyacinth-afam-7549ab98",
+      email: "hyacinthafam@yahoo.com"
     },
     projects: [
       {
@@ -276,7 +276,7 @@ const DeveloperProfile = () => {
               <div className="mb-8 md:mb-0">
                 <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500 mx-auto md:mx-0 transition-transform hover:scale-105 duration-300 focus-within:ring-4 focus-within:ring-blue-300">
                   <img 
-                    src="/images/background/banner.png" 
+                    src="/images/background/profile.jpeg" 
                     alt={`${developerData.name} profile photo`} 
                     className="w-full h-full object-cover"
                   />
