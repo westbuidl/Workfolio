@@ -528,9 +528,6 @@ useEffect(() => {
         </section>
 
         {/* Projects Section - Improved */}
-        // ... (Previous imports and components remain the same)
-
-// Inside DeveloperProfile component, modify the Projects Section:
 <section className="py-16 bg-white dark:bg-gray-900" aria-labelledby="projects-heading">
   <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-10 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Projects</h2>
