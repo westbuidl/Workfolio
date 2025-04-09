@@ -43,6 +43,8 @@ const TypeWriter: React.FC<TypeWriterProps> = ({ text, delay = 30 }) => {
   return <span>{currentText}</span>;
 };
 
+
+
 const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -57,21 +59,21 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
   }, [onClose]);
 
   return (
-    <div 
+    <div
       className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
       onClick={onClose}
       role="dialog"
       aria-labelledby="modal-title"
       aria-modal="true"
     >
-      <div 
+      <div
         className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
         onClick={e => e.stopPropagation()}
       >
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <h3 id="modal-title" className="text-2xl font-bold">{project.title}</h3>
-            <button 
+            <button
               onClick={onClose}
               className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1"
               aria-label="Close modal"
@@ -80,9 +82,9 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
             </button>
           </div>
           <div className="mb-6 overflow-hidden rounded-lg">
-            <img 
-              src={project.fullImage} 
-              alt={`${project.title} screenshot`} 
+            <img
+              src={project.fullImage}
+              alt={`${project.title} screenshot`}
               className="w-full h-auto"
               loading="lazy"
             />
@@ -92,7 +94,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
             <h4 className="font-semibold mb-2">Technologies Used:</h4>
             <div className="flex flex-wrap gap-2">
               {project.tech.map((tech, index) => (
-                <span 
+                <span
                   key={index}
                   className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full"
                 >
@@ -102,7 +104,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
             </div>
           </div>
           <div className="flex justify-end">
-            <a 
+            <a
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
@@ -120,11 +122,11 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
 const DeveloperProfile = () => {
   // State for bio section
   const [showFullBio, setShowFullBio] = useState(false);
-  
+
   // State for dark mode and projects
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [darkMode, setDarkMode] = useState(false);
-  
+
   // State for project carousel
   const [currentSlide, setCurrentSlide] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -139,14 +141,14 @@ const DeveloperProfile = () => {
       // Get initial preference
       const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
       setDarkMode(isDarkMode);
-      
+
       // Apply dark mode class to document
       if (isDarkMode) {
         document.documentElement.classList.add('dark');
       } else {
         document.documentElement.classList.remove('dark');
       }
-      
+
       // Set up listener for changes
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = (e: MediaQueryListEvent) => {
@@ -157,15 +159,15 @@ const DeveloperProfile = () => {
           document.documentElement.classList.remove('dark');
         }
       };
-      
+
       // Add event listener
       mediaQuery.addEventListener('change', handleChange);
-      
+
       // Clean up
       return () => mediaQuery.removeEventListener('change', handleChange);
     }
   }, []);
-  
+
   // Handle dark mode toggle
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -194,14 +196,14 @@ const DeveloperProfile = () => {
   const whileDragging = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     if (!isDragging) return;
     e.preventDefault();
-    
+
     let currentX;
     if ('touches' in e) {
       currentX = e.touches[0].pageX - (carouselRef.current?.offsetLeft || 0);
     } else {
       currentX = e.pageX - (carouselRef.current?.offsetLeft || 0);
     }
-    
+
     const walk = (currentX - startX) * 2; // Multiply by 2 for faster sliding
     if (carouselRef.current) {
       carouselRef.current.scrollLeft = scrollLeft - walk;
@@ -323,8 +325,8 @@ const DeveloperProfile = () => {
   };
 
   // Improved bio preview - create a 150 character preview instead of just first sentence
-  const shortBio = developerData.bio.length > 150 
-    ? developerData.bio.substring(0, 150) + '...' 
+  const shortBio = developerData.bio.length > 150
+    ? developerData.bio.substring(0, 150) + '...'
     : developerData.bio;
 
   // SEO metadata
@@ -335,6 +337,26 @@ const DeveloperProfile = () => {
     url: 'https://alexjohnson-portfolio.com', // Replace with your actual URL
     image: '/images/background/banner.png' // Replace with your actual social image
   };
+  const [visibleCards, setVisibleCards] = useState(1);
+
+// Add this useEffect with other useEffects
+useEffect(() => {
+  const updateVisibleCards = () => {
+    if (window.innerWidth >= 1024) {
+      setVisibleCards(4); // lg screens
+    } else if (window.innerWidth >= 768) {
+      setVisibleCards(3); // md screens
+    } else if (window.innerWidth >= 640) {
+      setVisibleCards(2); // sm screens
+    } else {
+      setVisibleCards(1); // mobile
+    }
+  };
+
+  updateVisibleCards();
+  window.addEventListener('resize', updateVisibleCards);
+  return () => window.removeEventListener('resize', updateVisibleCards);
+}, []);
 
   // Group skills by category
   const skillCategories = developerData.skills.reduce((acc, skill) => {
@@ -353,33 +375,33 @@ const DeveloperProfile = () => {
         <meta name="keywords" content={seoData.keywords} />
         <meta name="author" content={developerData.name} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content={seoData.url} />
         <meta property="og:title" content={seoData.title} />
         <meta property="og:description" content={seoData.description} />
         <meta property="og:image" content={seoData.image} />
-        
+
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={seoData.url} />
         <meta property="twitter:title" content={seoData.title} />
         <meta property="twitter:description" content={seoData.description} />
         <meta property="twitter:image" content={seoData.image} />
-        
+
         {/* Favicon */}
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        
+
         {/* Canonical URL */}
         <link rel="canonical" href={seoData.url} />
       </Head>
 
       <div className={`${inter.className} min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-950 text-gray-800 dark:text-gray-200`}>
         {/* Skip to main content link for accessibility */}
-        <a 
-          href="#main-content" 
+        <a
+          href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-blue-600 focus:text-white focus:z-50"
         >
           Skip to main content
@@ -408,9 +430,9 @@ const DeveloperProfile = () => {
             <div className="flex flex-col items-center md:flex-row md:justify-between md:space-x-10">
               <div className="mb-8 md:mb-0">
                 <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500 mx-auto md:mx-0 transition-transform hover:scale-105 duration-300 focus-within:ring-4 focus-within:ring-blue-300 relative shadow-lg shadow-blue-300/20 dark:shadow-blue-500/10">
-                  <img 
-                    src="/images/background/profile.jpeg" 
-                    alt={`${developerData.name} profile photo`} 
+                  <img
+                    src="/images/background/profile.jpeg"
+                    alt={`${developerData.name} profile photo`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -425,7 +447,7 @@ const DeveloperProfile = () => {
                     I'm {showFullBio ? developerData.bio : shortBio}
                   </p>
                   {developerData.bio.length > 150 && (
-                    <button 
+                    <button
                       onClick={() => setShowFullBio(!showFullBio)}
                       className="mt-2 text-blue-600 dark:text-blue-400 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
                     >
@@ -442,7 +464,7 @@ const DeveloperProfile = () => {
                     { icon: Linkedin, link: developerData.social.linkedin, label: "LinkedIn Profile" },
                     { icon: Mail, link: `mailto:${developerData.social.email}`, label: "Email Contact" }
                   ].map((social, index) => (
-                    <a 
+                    <a
                       key={index}
                       href={social.link}
                       aria-label={social.label}
@@ -461,10 +483,10 @@ const DeveloperProfile = () => {
         <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-blue-900" aria-labelledby="skills-heading">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="skills-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
-              <Code size={24} className="text-blue-600 dark:text-blue-400" aria-hidden="true" /> 
+              <Code size={24} className="text-blue-600 dark:text-blue-400" aria-hidden="true" />
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Skills & Expertise</span>
             </h2>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {Object.entries(skillCategories).map(([category, skills]) => (
                 <div key={category} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all">
@@ -474,7 +496,7 @@ const DeveloperProfile = () => {
                   <div className="p-5">
                     <div className="flex flex-wrap gap-2">
                       {skills.map((skill, index) => (
-                        <span 
+                        <span
                           key={index}
                           className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-sm font-medium transition-all hover:bg-blue-100 dark:hover:bg-blue-800"
                         >
@@ -486,7 +508,7 @@ const DeveloperProfile = () => {
                 </div>
               ))}
             </div>
-            
+
             <div className="mt-12 flex justify-center">
               <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 max-w-lg w-full">
                 <h3 className="text-lg font-medium mb-4 text-center">Certifications & Education</h3>
@@ -506,121 +528,141 @@ const DeveloperProfile = () => {
         </section>
 
         {/* Projects Section - Improved */}
-        <section className="py-16 bg-white dark:bg-gray-900" aria-labelledby="projects-heading">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-10 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Projects</h2>
-            
-            <div className="relative">
-              {/* Carousel Controls */}
-              <div className="flex justify-between items-center mb-4">
-                <button 
-                  onClick={prevSlide}
-                  disabled={currentSlide === 0}
-                  className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    currentSlide === 0 
-                      ? 'text-gray-400 cursor-not-allowed' 
-                      : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-800'
-                  }`}
-                  aria-label="Previous projects"
-                >
-                  <ChevronLeft size={24} />
-                </button>
-                
-                <div className="flex gap-2">
-                  {developerData.projects.map((_, index) => (
+        // ... (Previous imports and components remain the same)
+
+// Inside DeveloperProfile component, modify the Projects Section:
+<section className="py-16 bg-white dark:bg-gray-900" aria-labelledby="projects-heading">
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-10 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Projects</h2>
+    
+    <div className="relative">
+      {/* Carousel Controls */}
+      <div className="flex justify-between items-center mb-6">
+        <button 
+          onClick={prevSlide}
+          disabled={currentSlide === 0}
+          className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            currentSlide === 0 
+              ? 'text-gray-400 cursor-not-allowed' 
+              : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-800'
+          }`}
+          aria-label="Previous projects"
+        >
+          <ChevronLeft size={24} />
+        </button>
+        
+        <div className="hidden sm:flex gap-2">
+          {developerData.projects.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => scrollToSlide(index)}
+              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                currentSlide === index 
+                  ? 'bg-blue-600 dark:bg-blue-400' 
+                  : 'bg-gray-300 dark:bg-gray-600'
+              }`}
+              aria-label={`Go to project ${index + 1}`}
+            />
+          ))}
+        </div>
+        
+        <button 
+          onClick={nextSlide}
+          disabled={currentSlide >= developerData.projects.length - visibleCards}
+          className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+            currentSlide >= developerData.projects.length - visibleCards
+              ? 'text-gray-400 cursor-not-allowed' 
+              : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-800'
+          }`}
+          aria-label="Next projects"
+        >
+          <ChevronRight size={24} />
+        </button>
+      </div>
+
+      {/* Project Cards - Sliding Container */}
+      <div 
+        ref={carouselRef}
+        className="overflow-x-hidden relative"
+        onMouseDown={startDragging}
+        onMouseLeave={stopDragging}
+        onMouseUp={stopDragging}
+        onMouseMove={whileDragging}
+        onTouchStart={startDragging}
+        onTouchEnd={stopDragging}
+        onTouchMove={whileDragging}
+      >
+        <div 
+          className="flex transition-transform duration-300 ease-in-out gap-4 sm:gap-6"
+          style={{ 
+            transform: `translateX(-${currentSlide * (100 / visibleCards)}%)`,
+          }}
+        >
+          {developerData.projects.map((project, index) => (
+            <div 
+              key={index}
+              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg group h-full flex flex-col"
+            >
+              <div className="aspect-w-16 aspect-h-10 relative overflow-hidden">
+                <img 
+                  src={project.thumbnail} 
+                  alt={`${project.title} thumbnail`} 
+                  className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-3 sm:p-4">
+                  <div className="flex gap-2 sm:gap-3">
                     <button
-                      key={index}
-                      onClick={() => scrollToSlide(index)}
-                      className={`w-3 h-3 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                        currentSlide === index 
-                          ? 'bg-blue-600 dark:bg-blue-400' 
-                          : 'bg-gray-300 dark:bg-gray-600 hover:bg-blue-300 dark:hover:bg-blue-700'
-                      }`}
-                      aria-label={`Go to project ${index + 1}`}
-                    />
-                  ))}
-                </div>
-                
-                <button 
-                  onClick={nextSlide}
-                  disabled={currentSlide === developerData.projects.length - 1}
-                  className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                    currentSlide === developerData.projects.length - 1 
-                      ? 'text-gray-400 cursor-not-allowed' 
-                      : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-800'
-                  }`}
-                  aria-label="Next projects"
-                >
-                  <ChevronRight size={24} />
-                </button>
-              </div>
-              
-              {/* Project Cards - Fixed Grid Layout */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {developerData.projects.map((project, index) => (
-                  <div 
-                    key={index}
-                    className="bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg group h-full flex flex-col"
-                  >
-                    <div className="aspect-w-16 aspect-h-10 relative overflow-hidden">
-                      <img 
-                        src={project.thumbnail} 
-                        alt={`${project.title} thumbnail`} 
-                        className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-4">
-                        <div className="flex gap-3">
-                          <button
-                            onClick={() => setSelectedProject(project)}
-                            className="flex items-center gap-1 bg-white text-gray-800 px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-500 hover:text-white transition-colors"
-                            aria-label={`View ${project.title} details`}
-                          >
-                            <Eye size={16} /> View Details
-                          </button>
-                          <a 
-                            href={project.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-medium hover:bg-blue-700 transition-colors"
-                            aria-label={`Visit ${project.title} project`}
-                          >
-                            <ExternalLink size={16} /> Visit
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="p-5 flex-grow flex flex-col">
-                      <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-gray-100">{project.title}</h3>
-                      <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow line-clamp-3">{project.description}</p>
-                      <div className="flex flex-wrap gap-2 mt-auto">
-                        {project.tech.slice(0, 3).map((tech, techIndex) => (
-                          <span 
-                            key={techIndex}
-                            className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-md"
-                          >
-                            {tech}
-                          </span>
-                        ))}
-                        {project.tech.length > 3 && (
-                          <span className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md">
-                            +{project.tech.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    </div>
+                      onClick={() => setSelectedProject(project)}
+                      className="flex items-center gap-1 bg-white text-gray-800 px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium hover:bg-blue-500 hover:text-white transition-colors"
+                      aria-label={`View ${project.title} details`}
+                    >
+                      <Eye size={14} className="sm:w-16" /> <span className="hidden sm:inline">View Details</span>
+                    </button>
+                    <a 
+                      href={project.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1 bg-blue-600 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
+                      aria-label={`Visit ${project.title} project`}
+                    >
+                      <ExternalLink size={14} className="sm:w-16" /> <span className="hidden sm:inline">Visit</span>
+                    </a>
                   </div>
-                ))}
+                </div>
+              </div>
+              <div className="p-4 sm:p-5 flex-grow flex flex-col">
+                <h3 className="text-lg sm:text-xl font-bold mb-2 text-gray-800 dark:text-gray-100 line-clamp-1">{project.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow text-sm sm:text-base line-clamp-2 sm:line-clamp-3">{project.description}</p>
+                <div className="flex flex-wrap gap-1 sm:gap-2 mt-auto">
+                  {project.tech.slice(0, 3).map((tech, techIndex) => (
+                    <span 
+                      key={techIndex}
+                      className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-md"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                  {project.tech.length > 3 && (
+                    <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md">
+                      +{project.tech.length - 3}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
         {/* Contact Section */}
         <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-blue-900" aria-labelledby="contact-heading">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="contact-heading" className="text-2xl sm:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get In Touch</h2>
-            
+
             <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6 sm:p-8 max-w-lg mx-auto">
               <div className="mb-6 flex flex-col space-y-4">
                 <div className="flex items-center gap-3">
@@ -629,42 +671,42 @@ const DeveloperProfile = () => {
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">Email</h3>
-                    <a 
-                      href={`mailto:${developerData.social.email}`} 
+                    <a
+                      href={`mailto:${developerData.social.email}`}
                       className="text-blue-600 dark:text-blue-400 hover:underline"
                     >
                       {developerData.social.email}
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                   <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
                     <Linkedin className="h-6 w-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">LinkedIn</h3>
-                    <a 
+                    <a
                       href={developerData.social.linkedin}
                       target="_blank"
-                      rel="noopener noreferrer" 
+                      rel="noopener noreferrer"
                       className="text-blue-600 dark:text-blue-400 hover:underline"
                     >
                       Connect on LinkedIn
                     </a>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-3">
                   <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
                     <Github className="h-6 w-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
                   </div>
                   <div>
                     <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">GitHub</h3>
-                    <a 
+                    <a
                       href={developerData.social.github}
                       target="_blank"
-                      rel="noopener noreferrer" 
+                      rel="noopener noreferrer"
                       className="text-blue-600 dark:text-blue-400 hover:underline"
                     >
                       View GitHub Projects
@@ -672,7 +714,7 @@ const DeveloperProfile = () => {
                   </div>
                 </div>
               </div>
-              
+
               <div className="border-t border-gray-200 dark:border-gray-600 pt-6 mt-6">
                 <p className="text-center text-gray-600 dark:text-gray-300">
                   Open to new opportunities and collaborations!
@@ -690,7 +732,7 @@ const DeveloperProfile = () => {
                 &copy; {new Date().getFullYear()} {developerData.name}. All rights reserved.
               </p>
               <div className="flex space-x-4">
-                <a 
+                <a
                   href={developerData.social.github}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -699,7 +741,7 @@ const DeveloperProfile = () => {
                 >
                   <Github size={20} />
                 </a>
-                <a 
+                <a
                   href={developerData.social.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -708,7 +750,7 @@ const DeveloperProfile = () => {
                 >
                   <Linkedin size={20} />
                 </a>
-                <a 
+                <a
                   href={`mailto:${developerData.social.email}`}
                   className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
                   aria-label="Contact via Email"
@@ -722,9 +764,9 @@ const DeveloperProfile = () => {
 
         {/* Project Modal */}
         {selectedProject && (
-          <ProjectModal 
-            project={selectedProject} 
-            onClose={() => setSelectedProject(null)} 
+          <ProjectModal
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
           />
         )}
       </div>
