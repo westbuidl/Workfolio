@@ -274,52 +274,52 @@ const DeveloperProfile = () => {
     },
     projects: [
       {
-        title: "Analytics Dashboard",
-        description: "Data visualization platform with interactive charts and reports. Features include real-time data updates, customizable widgets, and comprehensive reporting tools for business intelligence.",
-        tech: ["React", "D3.js", "GraphQL", "Node.js"],
-        link: "https://analytics-dashboard.com",
-        thumbnail: "/images/background/banner.png",
-        fullImage: "/images/background/banner.png"
+        title: "Agroease ",
+        description: "Revolutionizing Agricultural Trade and Solutions. Agroease is a comprehensive platform designed to streamline agricultural trade, making it easier for farmers, suppliers, and buyers to connect and conduct business efficiently. With a focus on innovation and sustainability, Agroease is committed to enhancing the agricultural supply chain and providing valuable resources to its users.",
+        tech: ["PHP", "Blade", "React", "GraphQL", "Node.js"],
+        link: "https://agroease.trade",
+        thumbnail: "/images/background/agroease1.jpeg",
+        fullImage: "/images/background/agroease2.jpeg"
       },
       {
-        title: "E-Commerce Platform",
-        description: "Full-featured online store with payment processing and inventory management. Includes user authentication, product management, shopping cart functionality, secure checkout process, and order tracking.",
-        tech: ["React", "Next.js", "Node.js", "MongoDB"],
-        link: "https://ecommerce-platform.com",
-        thumbnail: "/images/background/banner.png",
-        fullImage: "/images/background/banner.png"
+        title: "CinthPay",
+        description: "CinthPay is a trusted payment platform built to simplify remittances from the UK to Nigeria. Founded with a mission to empower the Nigerian diaspora, we provide a fast, secure, and affordable way to send money home. Whether it's supporting family, paying bills, or celebrating life's milestones, CinthPay bridges the gap between you and your loved ones in Nigeria.",
+        tech: ["Javascript", "Next.js", "Node.js", "Prisma"],
+        link: "https://cinthpay.money",
+        thumbnail: "/images/background/cinthpay1.png",
+        fullImage: "/images/background/cinthpay2.png"
       },
       {
-        title: "Portfolio Website",
-        description: "Responsive portfolio website with project showcases. Features include smooth animations, dark mode support, contact form, and project filtering. Optimized for accessibility and SEO performance.",
-        tech: ["React", "TailwindCSS", "Framer Motion"],
-        link: "https://portfolio-website.com",
-        thumbnail: "/images/background/banner.png",
-        fullImage: "/images/background/banner.png"
+        title: "Soleer",
+        description: "Soleer is set to redefine the gig economy landscape. By harnessing the power of Solana's blockchain, we're creating a decentralized platform where freelancers and clients can connect, collaborate, and transact with unprecedented efficiency and security.",
+        tech: ["React", "TypeScript","TailwindCSS", "Framer Motion", "Node.js"],
+        link: "https://soleer.xyz",
+        thumbnail: "/images/background/soleer.png",
+        fullImage: "/images/background/soleer.png"
       },
       {
-        title: "Blockchain Audit Tool",
-        description: "Smart contract auditing platform that analyzes blockchain-based applications for security vulnerabilities and provides detailed reports with actionable recommendations for developers.",
-        tech: ["React", "Solidity", "Web3.js", "Node.js"],
-        link: "https://blockchain-audit.com",
-        thumbnail: "/images/background/banner.png",
-        fullImage: "/images/background/banner.png"
+        title: "Todo-s",
+        description: "A simple, responsive task management web application built with PHP 8+, MySQL 8+, jQuery, and AJAX A simple, responsive task management web application built with PHP 8+, MySQL 8+, jQuery, and AJAX. Features include adding tasks with descriptions, marking tasks as done, removing tasks with confirmation, and viewing task details via a modal - all without page reloads.",
+        tech: ["JavaCsript", "PHP", "Web3.AJAX", "SCSS"],
+        link: "https://github.com/westbuidl/Todo-s",
+        thumbnail: "/images/background/Todos-landingpage.png",
+        fullImage: "/images/background/Todos-landingpage.png"
       },
       {
-        title: "Educational Platform",
-        description: "Interactive learning management system with course creation tools, student progress tracking, and integrated assessment features. Supports multimedia content and virtual classroom sessions.",
+        title: "DeepMind",
+        description: "DeepMind AI transforms raw, anonymous blockchain data into actionable intelligence, enabling smarter decisions and deeper insights.",
         tech: ["React", "Firebase", "Express.js", "Socket.io"],
-        link: "https://educational-platform.com",
-        thumbnail: "/images/background/banner.png",
-        fullImage: "/images/background/banner.png"
+        link: "https://deepmindbloc.xyz",
+        thumbnail: "/images/background/logo.png",
+        fullImage: "/images/background/Deepmind logo White.png"
       },
       {
-        title: "AI Content Assistant",
-        description: "Natural language processing tool that helps content creators generate ideas, improve writing quality, and optimize content for specific audiences using machine learning algorithms.",
-        tech: ["Python", "TensorFlow", "Flask", "React"],
-        link: "https://ai-content-assistant.com",
-        thumbnail: "/images/background/banner.png",
-        fullImage: "/images/background/banner.png"
+        title: "C++ Gaming",
+        description: "Simulating Rocket Launch using C++ and DirectX 3D",
+        tech: ["C++", "C", "HLSL", "DirectX 3D"],
+        link: "https://github.com/westbuidl/FinalLab_Solution",
+        thumbnail: "/images/background/Clab.jpeg",
+        fullImage: "/images/background/Clab.jpeg"
       }
     ]
   };
@@ -483,10 +483,10 @@ useEffect(() => {
         <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-blue-900" aria-labelledby="skills-heading">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="skills-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
-              <Code size={24} className="text-blue-600 dark:text-blue-400" aria-hidden="true" />
+              <Code size={24} className="text-blue-600 dark:text-blue-400" aria-hidden="true" /> 
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Skills & Expertise</span>
             </h2>
-
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {Object.entries(skillCategories).map(([category, skills]) => (
                 <div key={category} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all">
@@ -496,7 +496,7 @@ useEffect(() => {
                   <div className="p-5">
                     <div className="flex flex-wrap gap-2">
                       {skills.map((skill, index) => (
-                        <span
+                        <span 
                           key={index}
                           className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-sm font-medium transition-all hover:bg-blue-100 dark:hover:bg-blue-800"
                         >
@@ -508,7 +508,7 @@ useEffect(() => {
                 </div>
               ))}
             </div>
-
+            
             <div className="mt-12 flex justify-center">
               <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 max-w-lg w-full">
                 <h3 className="text-lg font-medium mb-4 text-center">Certifications & Education</h3>
@@ -772,3 +772,9 @@ useEffect(() => {
 };
 
 export default DeveloperProfile;
+
+
+
+
+
+
