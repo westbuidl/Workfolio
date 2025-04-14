@@ -43,8 +43,6 @@ const TypeWriter: React.FC<TypeWriterProps> = ({ text, delay = 30 }) => {
   return <span>{currentText}</span>;
 };
 
-
-
 const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
   if (!project) return null;
 
@@ -67,7 +65,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
       aria-modal="true"
     >
       <div
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
+        className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-auto"
         onClick={e => e.stopPropagation()}
       >
         <div className="p-6">
@@ -75,7 +73,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
             <h3 id="modal-title" className="text-2xl font-bold">{project.title}</h3>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-full p-1"
+              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-800 rounded-full p-1"
               aria-label="Close modal"
             >
               <X size={24} />
@@ -96,7 +94,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
               {project.tech.map((tech, index) => (
                 <span
                   key={index}
-                  className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm rounded-full"
+                  className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm rounded-full"
                 >
                   {tech}
                 </span>
@@ -108,7 +106,7 @@ const ProjectModal: React.FC<ModalProps> = ({ project, onClose }) => {
               href={project.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+              className="flex items-center gap-2 bg-blue-800 hover:bg-blue-900 text-white font-medium py-2 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
             >
               Visit Project <ExternalLink size={16} />
             </a>
@@ -133,6 +131,11 @@ const DeveloperProfile = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [autoScrollInterval, setAutoScrollInterval] = useState<NodeJS.Timeout | null>(null);
+
+  // Initialize visibleCards before using it in useEffect
+  const [visibleCards, setVisibleCards] = useState(1);
+  //const [autoScrollInterval, setAutoScrollInterval] = useState<NodeJS.Timeout | null>(null);
 
   // Check system preference for dark mode on initial load and set up listeners
   useEffect(() => {
@@ -178,8 +181,35 @@ const DeveloperProfile = () => {
     }
   };
 
+  // Start auto-scroll for projects carousel
+  useEffect(() => {
+    const startAutoScroll = () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+      
+      const interval = setInterval(() => {
+        if (developerData.projects.length <= visibleCards) return;
+        
+        setCurrentSlide(prev => {
+          if (prev >= developerData.projects.length - visibleCards) {
+            return 0;
+          }
+          return prev + 1;
+        });
+      }, 5000);
+      
+      setAutoScrollInterval(interval);
+    };
+    
+    startAutoScroll();
+    
+    return () => {
+      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    };
+  }, [visibleCards]);
+
   // Handle carousel dragging
   const startDragging = (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
+    if (autoScrollInterval) clearInterval(autoScrollInterval);
     setIsDragging(true);
     if ('touches' in e) {
       setStartX(e.touches[0].pageX - (carouselRef.current?.offsetLeft || 0));
@@ -223,13 +253,21 @@ const DeveloperProfile = () => {
   };
 
   const nextSlide = () => {
-    const newIndex = Math.min(currentSlide + 1, developerData.projects.length - 1);
-    scrollToSlide(newIndex);
+    if (autoScrollInterval) clearInterval(autoScrollInterval);
+    if (currentSlide >= developerData.projects.length - visibleCards) {
+      scrollToSlide(0);
+    } else {
+      scrollToSlide(currentSlide + 1);
+    }
   };
 
   const prevSlide = () => {
-    const newIndex = Math.max(currentSlide - 1, 0);
-    scrollToSlide(newIndex);
+    if (autoScrollInterval) clearInterval(autoScrollInterval);
+    if (currentSlide === 0) {
+      scrollToSlide(developerData.projects.length - visibleCards);
+    } else {
+      scrollToSlide(currentSlide - 1);
+    }
   };
 
   // Update current slide based on scroll position
@@ -251,7 +289,7 @@ const DeveloperProfile = () => {
 
   const developerData = {
     name: "Hyacinth Afam",
-    title: "Senior Web Developer",
+    title: "Software Engineer",
     bio: "a versatile and passionate developer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, UK, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool Marlow. My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, and C#, paired with expertise in cloud platforms (AWS, Azure exposure), APIs, and docs-as-code practices using Git and Markdown. I thrive at the intersection of code and clarity—whether it's building scalable websites with blockchain integrations, writing engaging tutorials for diverse learners, or optimizing SaaS platforms to boost adoption by 15%, as I did at Agroease. I'm proudest of my work on Smart Audits, where I co-founded a blockchain audit tool, designing responsive, secure web interfaces that empowered clients with actionable insights. My approach is rooted in clean, maintainable code, Agile collaboration, and a relentless drive to simplify complex concepts for users, from students to global enterprises. With a Master's in Advanced Computer Science from the University of Hull and certifications like AWS Certified Cloud Practitioner (in progress), I'm a fast learner eager to tackle new challenges. I've contributed to education platforms, event-style websites, and customer conversation tools, always prioritizing performance, accessibility, and teamwork. Explore my projects to see how I blend technical skill with a passion for making a difference—let's connect to create something impactful together.",
     skills: [
       { name: "React", category: "Frontend" },
@@ -265,7 +303,25 @@ const DeveloperProfile = () => {
       { name: "TailwindCSS", category: "Frontend" },
       { name: "Python", category: "Languages" },
       { name: "C#", category: "Languages" },
-      { name: "Git", category: "DevTools" }
+      { name: "Git", category: "DevTools" },
+      { name: "Redux", category: "Frontend" },
+      { name: "Jest", category: "Testing" },
+      { name: "Docker", category: "DevOps" },
+      { name: "CI/CD", category: "DevOps" },
+      { name: "PostgreSQL", category: "Database" },
+      { name: "Figma", category: "Design" },
+      { name: "RESTful APIs", category: "API" },
+      { name: "Kubernetes", category: "DevOps" },
+      { name: "Vue.js", category: "Frontend" },
+      { name: "Svelte", category: "Frontend" },
+      { name: "Firebase", category: "Backend" },
+      { name: "Serverless", category: "Architecture" },
+      { name: "OAuth", category: "Security" },
+      { name: "JWT", category: "Security" },
+      { name: "Webpack", category: "Build Tools" },
+      { name: "SASS/SCSS", category: "Frontend" },
+      { name: "Azure", category: "Cloud" },
+      { name: "GCP", category: "Cloud" }
     ],
     social: {
       github: "https://github.com/westbuidl",
@@ -324,39 +380,54 @@ const DeveloperProfile = () => {
     ]
   };
 
-  // Improved bio preview - create a 150 character preview instead of just first sentence
-  const shortBio = developerData.bio.length > 150
-    ? developerData.bio.substring(0, 150) + '...'
-    : developerData.bio;
+  // Format bio into paragraphs for better readability
+  const formattedBio = developerData.bio.split('. ')
+    .reduce((acc, sentence, i, arr) => {
+      // Add the sentence back with its period
+      acc += sentence + (i < arr.length - 1 ? '.' : '');
+      
+      // Every ~3 sentences or at the end, add a paragraph break
+      if ((i + 1) % 3 === 0 && i !== arr.length - 1) {
+        acc += '\n\n';
+      }
+      
+      return acc;
+    }, '');
+
+  // Improved bio preview - create a 150 character preview
+  const shortBio = formattedBio.length > 150
+    ? formattedBio.substring(0, 150) + '...'
+    : formattedBio;
 
   // SEO metadata
   const seoData = {
     title: `${developerData.name} - ${developerData.title}`,
     description: developerData.bio,
     keywords: [...developerData.skills.map(skill => skill.name), 'web developer', 'portfolio', 'frontend developer', 'developer portfolio'].join(', '),
-    url: 'https://alexjohnson-portfolio.com', // Replace with your actual URL
+    url: 'hyacinthafam.work', // Replace with your actual URL
     image: '/images/background/banner.png' // Replace with your actual social image
   };
-  const [visibleCards, setVisibleCards] = useState(1);
+  
+  //const [visibleCards, setVisibleCards] = useState(1);
 
-// Add this useEffect with other useEffects
-useEffect(() => {
-  const updateVisibleCards = () => {
-    if (window.innerWidth >= 1024) {
-      setVisibleCards(4); // lg screens
-    } else if (window.innerWidth >= 768) {
-      setVisibleCards(3); // md screens
-    } else if (window.innerWidth >= 640) {
-      setVisibleCards(2); // sm screens
-    } else {
-      setVisibleCards(1); // mobile
-    }
-  };
+  // Add this useEffect with other useEffects
+  useEffect(() => {
+    const updateVisibleCards = () => {
+      if (window.innerWidth >= 1024) {
+        setVisibleCards(4); // lg screens
+      } else if (window.innerWidth >= 768) {
+        setVisibleCards(3); // md screens
+      } else if (window.innerWidth >= 640) {
+        setVisibleCards(2); // sm screens
+      } else {
+        setVisibleCards(1); // mobile
+      }
+    };
 
-  updateVisibleCards();
-  window.addEventListener('resize', updateVisibleCards);
-  return () => window.removeEventListener('resize', updateVisibleCards);
-}, []);
+    updateVisibleCards();
+    window.addEventListener('resize', updateVisibleCards);
+    return () => window.removeEventListener('resize', updateVisibleCards);
+  }, []);
 
   // Group skills by category
   const skillCategories = developerData.skills.reduce((acc, skill) => {
@@ -398,11 +469,11 @@ useEffect(() => {
         <link rel="canonical" href={seoData.url} />
       </Head>
 
-      <div className={`${inter.className} min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-blue-950 text-gray-800 dark:text-gray-200`}>
+      <div className={`${inter.className} min-h-screen bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-blue-950 text-gray-800 dark:text-gray-200`}>
         {/* Skip to main content link for accessibility */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-blue-600 focus:text-white focus:z-50"
+          className="sr-only focus:not-sr-only focus:absolute focus:p-4 focus:bg-blue-800 focus:text-white focus:z-50"
         >
           Skip to main content
         </a>
@@ -410,7 +481,7 @@ useEffect(() => {
         {/* Dark mode toggle */}
         <button
           onClick={toggleDarkMode}
-          className="fixed top-4 right-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:shadow-blue-200 dark:hover:shadow-blue-900"
+          className="fixed top-4 right-4 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg z-10 focus:outline-none focus:ring-2 focus:ring-blue-800 transition-all hover:shadow-blue-200 dark:hover:shadow-blue-900"
           aria-label={`Switch to ${darkMode ? 'light' : 'dark'} mode`}
         >
           {darkMode ? (
@@ -425,11 +496,11 @@ useEffect(() => {
         </button>
 
         {/* Hero Section */}
-        <div className="relative bg-white dark:bg-gray-800 shadow-lg" id="main-content">
+        <div className="relative bg-white dark:bg-gray-900 shadow-lg" id="main-content">
           <div className="max-w-6xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center md:flex-row md:justify-between md:space-x-10">
               <div className="mb-8 md:mb-0">
-                <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-500 mx-auto md:mx-0 transition-transform hover:scale-105 duration-300 focus-within:ring-4 focus-within:ring-blue-300 relative shadow-lg shadow-blue-300/20 dark:shadow-blue-500/10">
+                <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-blue-800 mx-auto md:mx-0 transition-transform hover:scale-105 duration-300 focus-within:ring-4 focus-within:ring-blue-500 relative shadow-lg shadow-blue-300/20 dark:shadow-blue-500/10">
                   <img
                     src="/images/background/profile.jpeg"
                     alt={`${developerData.name} profile photo`}
@@ -438,24 +509,24 @@ useEffect(() => {
                 </div>
               </div>
               <div className="text-center md:text-left flex-1">
-                <h1 className="text-4xl sm:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                <h1 className="text-4xl sm:text-5xl font-bold mb-3 bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">
                   <TypeWriter text={developerData.name} />
                 </h1>
-                <p className="text-xl sm:text-2xl text-blue-600 dark:text-blue-400 mb-4 font-medium">{developerData.title}</p>
+                <p className="text-xl sm:text-2xl text-blue-800 dark:text-blue-400 mb-4 font-medium">{developerData.title}</p>
                 <div className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl bio-container relative">
-                  <p className="leading-relaxed">
-                    I'm {showFullBio ? developerData.bio : shortBio}
+                  <p className="leading-relaxed whitespace-pre-line">
+                    I'm {showFullBio ? formattedBio : shortBio}
                   </p>
-                  {developerData.bio.length > 150 && (
+                  {formattedBio.length > 150 && (
                     <button
                       onClick={() => setShowFullBio(!showFullBio)}
-                      className="mt-2 text-blue-600 dark:text-blue-400 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-500 rounded px-2"
+                      className="mt-2 text-blue-800 dark:text-blue-400 font-medium hover:underline focus:outline-none focus:ring-2 focus:ring-blue-800 rounded px-2"
                     >
                       {showFullBio ? 'Read less' : 'Read more'}
                     </button>
                   )}
-                  {!showFullBio && developerData.bio.length > 150 && (
-                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white dark:from-gray-800 to-transparent pointer-events-none"></div>
+                  {!showFullBio && formattedBio.length > 150 && (
+                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white dark:from-gray-900 to-transparent pointer-events-none"></div>
                   )}
                 </div>
                 <div className="flex justify-center md:justify-start space-x-6">
@@ -468,7 +539,7 @@ useEffect(() => {
                       key={index}
                       href={social.link}
                       aria-label={social.label}
-                      className="text-gray-600 hover:text-blue-500 dark:text-gray-300 dark:hover:text-blue-400 transition-colors p-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="text-gray-600 hover:text-blue-800 dark:text-gray-300 dark:hover:text-blue-400 transition-colors p-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800"
                     >
                       <social.icon size={24} />
                     </a>
@@ -479,26 +550,42 @@ useEffect(() => {
           </div>
         </div>
 
-        {/* Skills Section - Redesigned */}
-        <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-blue-900" aria-labelledby="skills-heading">
+        {/* Skills Section - Simplified Design */}
+        <section className="py-16 bg-blue-50 dark:bg-blue-950" aria-labelledby="skills-heading">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="skills-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
-              <Code size={24} className="text-blue-600 dark:text-blue-400" aria-hidden="true" /> 
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Skills & Expertise</span>
+              <Code size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" /> 
+              <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Skills & Expertise</span>
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {Object.entries(skillCategories).map(([category, skills]) => (
-                <div key={category} className="bg-white dark:bg-gray-700 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all">
-                  <div className="bg-blue-600 dark:bg-blue-800 py-3 px-4">
-                    <h3 className="text-lg font-semibold text-white">{category}</h3>
+            {/* Simplified Skills Grid */}
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 mb-10">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {developerData.skills.map((skill, index) => (
+                  <div 
+                    key={index}
+                    className="flex items-center p-3 rounded-lg bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors"
+                  >
+                    <span className="w-2 h-2 rounded-full bg-blue-800 dark:bg-blue-400 mr-2"></span>
+                    <span className="text-sm font-medium text-blue-800 dark:text-blue-300">{skill.name}</span>
                   </div>
-                  <div className="p-5">
+                ))}
+              </div>
+            </div>
+            
+            {/* Categories */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Object.entries(skillCategories).map(([category, skills], index) => (
+                <div key={index} className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
+                  <div className="bg-blue-800 dark:bg-blue-800 py-2 px-4">
+                    <h3 className="text-md font-semibold text-white">{category}</h3>
+                  </div>
+                  <div className="p-4">
                     <div className="flex flex-wrap gap-2">
-                      {skills.map((skill, index) => (
+                      {skills.map((skill, skillIndex) => (
                         <span 
-                          key={index}
-                          className="px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-md text-sm font-medium transition-all hover:bg-blue-100 dark:hover:bg-blue-800"
+                          key={skillIndex}
+                          className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs"
                         >
                           {skill}
                         </span>
@@ -510,271 +597,283 @@ useEffect(() => {
             </div>
             
             <div className="mt-12 flex justify-center">
-              <div className="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6 max-w-lg w-full">
-                <h3 className="text-lg font-medium mb-4 text-center">Certifications & Education</h3>
+              <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 max-w-lg w-full">
+                <h3 className="text-lg font-medium mb-4 text-center text-blue-800 dark:text-blue-400">Certifications & Education</h3>
                 <ul className="space-y-3">
-                  <li className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500"></div>
-                    <span>Master's in Advanced Computer Science - University of Hull</span>
-                  </li>
-                  <li className="flex items-center space-x-3">
-                    <div className="flex-shrink-0 w-2 h-2 rounded-full bg-blue-500"></div>
-                    <span>AWS Certified Cloud Practitioner (in progress)</span>
-                  </li>
-                </ul>
+                <li className="flex items-center border-b border-gray-100 dark:border-gray-800 pb-2">
+    <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-1 mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-800 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <span>Master's in Advanced Computer Science - University of Hull</span>
+  </li>
+  <li className="flex items-center border-b border-gray-100 dark:border-gray-800 pb-2">
+    <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-1 mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-800 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <span>AWS Certified Cloud Practitioner (in progress)</span>
+  </li>
+  <li className="flex items-center">
+    <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-1 mr-3">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-800 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+      </svg>
+    </div>
+    <span>Full Stack Web Development - Self-taught & Professional Experience</span>
+  </li>
+</ul>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Projects Section - Improved */}
-<section className="py-16 bg-white dark:bg-gray-900" aria-labelledby="projects-heading">
-  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-10 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Projects</h2>
-    
-    <div className="relative">
-      {/* Carousel Controls */}
-      <div className="flex justify-between items-center mb-6">
-        <button 
-          onClick={prevSlide}
-          disabled={currentSlide === 0}
-          className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            currentSlide === 0 
-              ? 'text-gray-400 cursor-not-allowed' 
-              : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-800'
-          }`}
-          aria-label="Previous projects"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        
-        <div className="hidden sm:flex gap-2">
-          {developerData.projects.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => scrollToSlide(index)}
-              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                currentSlide === index 
-                  ? 'bg-blue-600 dark:bg-blue-400' 
-                  : 'bg-gray-300 dark:bg-gray-600'
-              }`}
-              aria-label={`Go to project ${index + 1}`}
-            />
-          ))}
-        </div>
-        
-        <button 
-          onClick={nextSlide}
-          disabled={currentSlide >= developerData.projects.length - visibleCards}
-          className={`p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-            currentSlide >= developerData.projects.length - visibleCards
-              ? 'text-gray-400 cursor-not-allowed' 
-              : 'text-blue-600 hover:bg-blue-100 dark:text-blue-400 dark:hover:bg-gray-800'
-          }`}
-          aria-label="Next projects"
-        >
-          <ChevronRight size={24} />
-        </button>
-      </div>
+        {/* Projects Section */}
+        <section className="py-16 bg-white dark:bg-gray-900" aria-labelledby="projects-heading">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
+              <Code size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" />
+              <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Featured Projects</span>
+            </h2>
 
-      {/* Project Cards - Sliding Container */}
-      <div 
-        ref={carouselRef}
-        className="overflow-x-hidden relative"
-        onMouseDown={startDragging}
-        onMouseLeave={stopDragging}
-        onMouseUp={stopDragging}
-        onMouseMove={whileDragging}
-        onTouchStart={startDragging}
-        onTouchEnd={stopDragging}
-        onTouchMove={whileDragging}
-      >
-        <div 
-          className="flex transition-transform duration-300 ease-in-out gap-4 sm:gap-6"
-          style={{ 
-            transform: `translateX(-${currentSlide * (100 / visibleCards)}%)`,
-          }}
-        >
-          {developerData.projects.map((project, index) => (
-            <div 
-              key={index}
-              className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 flex-shrink-0 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-md overflow-hidden transition-all hover:shadow-lg group h-full flex flex-col"
-            >
-              <div className="aspect-w-16 aspect-h-10 relative overflow-hidden">
-                <img 
-                  src={project.thumbnail} 
-                  alt={`${project.title} thumbnail`} 
-                  className="w-full h-48 sm:h-56 md:h-64 object-cover transition-transform duration-500 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-3 sm:p-4">
-                  <div className="flex gap-2 sm:gap-3">
-                    <button
-                      onClick={() => setSelectedProject(project)}
-                      className="flex items-center gap-1 bg-white text-gray-800 px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium hover:bg-blue-500 hover:text-white transition-colors"
-                      aria-label={`View ${project.title} details`}
+            {/* Projects Carousel */}
+            <div className="relative">
+              <div 
+                className="overflow-hidden" 
+                ref={carouselRef}
+                onMouseDown={startDragging}
+                onMouseLeave={stopDragging}
+                onMouseUp={stopDragging}
+                onMouseMove={whileDragging}
+                onTouchStart={startDragging}
+                onTouchEnd={stopDragging}
+                onTouchMove={whileDragging}
+              >
+                <div 
+                  className="flex transition-transform duration-300"
+                  style={{
+                    transform: `translateX(-${currentSlide * (100 / visibleCards)}%)`,
+                    width: `${(developerData.projects.length / visibleCards) * 100}%`
+                  }}
+                >
+                  {developerData.projects.map((project, index) => (
+                    <div 
+                      key={index} 
+                      className="px-2"
+                      style={{ width: `${100 / developerData.projects.length * visibleCards}%` }}
                     >
-                      <Eye size={14} className="sm:w-16" /> <span className="hidden sm:inline">View Details</span>
-                    </button>
-                    <a 
-                      href={project.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 bg-blue-600 text-white px-2 py-1 sm:px-3 sm:py-1 rounded-full text-xs sm:text-sm font-medium hover:bg-blue-700 transition-colors"
-                      aria-label={`Visit ${project.title} project`}
-                    >
-                      <ExternalLink size={14} className="sm:w-16" /> <span className="hidden sm:inline">Visit</span>
-                    </a>
-                  </div>
+                      <div 
+                        className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full"
+                        tabIndex={0}
+                        role="button"
+                        onClick={() => setSelectedProject(project)}
+                        onKeyDown={(e) => e.key === 'Enter' && setSelectedProject(project)}
+                        aria-label={`View details of ${project.title} project`}
+                      >
+                        <div className="relative aspect-video">
+                          <img 
+                            src={project.thumbnail} 
+                            alt={`${project.title} thumbnail`} 
+                            className="w-full h-full object-cover"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                            <div className="p-2 bg-blue-800 rounded-full">
+                              <Eye size={20} className="text-white" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="p-5">
+                          <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-400">{project.title}</h3>
+                          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+                            {project.description.length > 100 
+                              ? project.description.substring(0, 100) + '...' 
+                              : project.description}
+                          </p>
+                          <div className="flex flex-wrap gap-1 mb-3">
+                            {project.tech.slice(0, 3).map((tech, techIndex) => (
+                              <span 
+                                key={techIndex} 
+                                className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                            {project.tech.length > 3 && (
+                              <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs">
+                                +{project.tech.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                          <button 
+                            className="mt-2 text-sm font-medium text-blue-800 dark:text-blue-400 flex items-center"
+                          >
+                            View Project Details <ExternalLink size={14} className="ml-1" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div className="p-4 sm:p-5 flex-grow flex flex-col">
-                <h3 className="text-lg sm:text-xl font-bold mb-2 text-gray-800 dark:text-gray-100 line-clamp-1">{project.title}</h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 flex-grow text-sm sm:text-base line-clamp-2 sm:line-clamp-3">{project.description}</p>
-                <div className="flex flex-wrap gap-1 sm:gap-2 mt-auto">
-                  {project.tech.slice(0, 3).map((tech, techIndex) => (
-                    <span 
-                      key={techIndex}
-                      className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs rounded-md"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                  {project.tech.length > 3 && (
-                    <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-md">
-                      +{project.tech.length - 3}
-                    </span>
-                  )}
-                </div>
+
+              {/* Navigation Arrows */}
+              <button 
+                onClick={prevSlide}
+                className="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                aria-label="Previous project"
+              >
+                <ChevronLeft size={24} className="text-blue-800 dark:text-blue-400" />
+              </button>
+              <button 
+                onClick={nextSlide}
+                className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                aria-label="Next project"
+              >
+                <ChevronRight size={24} className="text-blue-800 dark:text-blue-400" />
+              </button>
+
+              {/* Pagination Dots */}
+              <div className="flex justify-center mt-6 space-x-2">
+                {Array.from({ length: developerData.projects.length - visibleCards + 1 }).map((_, i) => (
+                  <button
+                    key={i}
+                    className={`w-2.5 h-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800 ${
+                      currentSlide === i ? 'bg-blue-800 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-700'
+                    }`}
+                    onClick={() => scrollToSlide(i)}
+                    aria-label={`Go to slide ${i + 1}`}
+                    aria-current={currentSlide === i ? 'true' : 'false'}
+                  />
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+          </div>
+        </section>
 
         {/* Contact Section */}
-        <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-blue-900" aria-labelledby="contact-heading">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="contact-heading" className="text-2xl sm:text-3xl font-bold mb-8 text-center bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Get In Touch</h2>
-
-            <div className="bg-white dark:bg-gray-700 rounded-lg shadow-lg p-6 sm:p-8 max-w-lg mx-auto">
-              <div className="mb-6 flex flex-col space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
-                    <Mail className="h-6 w-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
+        <section className="py-16 bg-blue-50 dark:bg-blue-950" aria-labelledby="contact-heading">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="contact-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
+              <Mail size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" />
+              <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Get In Touch</span>
+            </h2>
+            
+            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
+              <form className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="Your name"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                      required
+                    />
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">Email</h3>
-                    <a
-                      href={`mailto:${developerData.social.email}`}
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      {developerData.social.email}
-                    </a>
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      placeholder="Your email address"
+                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                      required
+                    />
                   </div>
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
-                    <Linkedin className="h-6 w-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">LinkedIn</h3>
-                    <a
-                      href={developerData.social.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      Connect on LinkedIn
-                    </a>
-                  </div>
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    placeholder="Subject of your message"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                    required
+                  />
                 </div>
-
-                <div className="flex items-center gap-3">
-                  <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-full">
-                    <Github className="h-6 w-6 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-800 dark:text-gray-100">GitHub</h3>
-                    <a
-                      href={developerData.social.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 dark:text-blue-400 hover:underline"
-                    >
-                      View GitHub Projects
-                    </a>
-                  </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    placeholder="Your message"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+                    required
+                  />
                 </div>
-              </div>
-
-              <div className="border-t border-gray-200 dark:border-gray-600 pt-6 mt-6">
-                <p className="text-center text-gray-600 dark:text-gray-300">
-                  Open to new opportunities and collaborations!
-                </p>
+                <div>
+                  <button
+                    type="submit"
+                    className="w-full bg-blue-800 hover:bg-blue-900 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+                  >
+                    Send Message
+                  </button>
+                </div>
+              </form>
+            </div>
+            
+            <div className="mt-12 text-center">
+              <p className="text-gray-600 dark:text-gray-300 mb-4">Or connect with me directly:</p>
+              <div className="flex justify-center space-x-6">
+                {[
+                  { icon: Github, link: developerData.social.github, label: "GitHub Profile" },
+                  { icon: Linkedin, link: developerData.social.linkedin, label: "LinkedIn Profile" },
+                  { icon: Mail, link: `mailto:${developerData.social.email}`, label: "Email Contact" }
+                ].map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.link}
+                    aria-label={social.label}
+                    className="text-gray-600 hover:text-blue-800 dark:text-gray-300 dark:hover:text-blue-400 transition-colors p-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800"
+                  >
+                    <social.icon size={24} />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="bg-gray-100 dark:bg-gray-900 py-8 border-t border-gray-200 dark:border-gray-800">
+        <footer className="bg-white dark:bg-gray-900 shadow-inner py-8">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
-                &copy; {new Date().getFullYear()} {developerData.name}. All rights reserved.
-              </p>
-              <div className="flex space-x-4">
-                <a
-                  href={developerData.social.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
-                  aria-label="GitHub Profile"
-                >
-                  <Github size={20} />
-                </a>
-                <a
-                  href={developerData.social.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
-                  aria-label="LinkedIn Profile"
-                >
-                  <Linkedin size={20} />
-                </a>
-                <a
-                  href={`mailto:${developerData.social.email}`}
-                  className="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400"
-                  aria-label="Contact via Email"
-                >
-                  <Mail size={20} />
-                </a>
+            <div className="flex flex-col items-center justify-between md:flex-row">
+              <div className="mb-4 md:mb-0">
+                <p className="text-gray-600 dark:text-gray-300">© {new Date().getFullYear()} {developerData.name}. All rights reserved.</p>
+              </div>
+              <div className="flex space-x-6">
+                {[
+                  { icon: Github, link: developerData.social.github, label: "GitHub Profile" },
+                  { icon: Linkedin, link: developerData.social.linkedin, label: "LinkedIn Profile" },
+                  { icon: Mail, link: `mailto:${developerData.social.email}`, label: "Email Contact" }
+                ].map((social, index) => (
+                  <a
+                    key={index}
+                    href={social.link}
+                    aria-label={social.label}
+                    className="text-gray-600 hover:text-blue-800 dark:text-gray-300 dark:hover:text-blue-400 transition-colors"
+                  >
+                    <social.icon size={20} />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
         </footer>
-
+        
         {/* Project Modal */}
-        {selectedProject && (
-          <ProjectModal
-            project={selectedProject}
-            onClose={() => setSelectedProject(null)}
-          />
-        )}
+        {selectedProject && <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
       </div>
     </>
   );
 };
 
 export default DeveloperProfile;
-
-
-
-
-
-
