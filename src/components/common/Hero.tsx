@@ -330,6 +330,14 @@ const DeveloperProfile = () => {
     },
     projects: [
       {
+        title: "Url Shortener ",
+        description: "A simple URL shortening service built with Laravel that converts long URLs into short, manageable links.",
+        tech: ["PHP", "Blade", "CSS", "JavaScript"],
+        link: "https://github.com/westbuidl/urlShortener.git",
+        thumbnail: "/images/background/urlshort.png",
+        fullImage: "/images/background/urlshort.png"
+      },
+      {
         title: "Agroease ",
         description: "Revolutionizing Agricultural Trade and Solutions. Agroease is a comprehensive platform designed to streamline agricultural trade, making it easier for farmers, suppliers, and buyers to connect and conduct business efficiently. With a focus on innovation and sustainability, Agroease is committed to enhancing the agricultural supply chain and providing valuable resources to its users.",
         tech: ["PHP", "Blade", "React", "GraphQL", "Node.js"],
