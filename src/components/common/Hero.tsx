@@ -290,31 +290,25 @@ const DeveloperProfile = () => {
   const developerData = {
     name: "Hyacinth Afam",
     title: "Software Engineer",
-    bio: "a versatile and passionate developer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, UK, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool Marlow. My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, and C#, paired with expertise in cloud platforms (AWS, Azure exposure), APIs, and docs-as-code practices using Git and Markdown. I thrive at the intersection of code and clarity—whether it's building scalable websites with blockchain integrations, writing engaging tutorials for diverse learners, or optimizing SaaS platforms to boost adoption by 15%, as I did at Agroease. I'm proudest of my work on Smart Audits, where I co-founded a blockchain audit tool, designing responsive, secure web interfaces that empowered clients with actionable insights. My approach is rooted in clean, maintainable code, Agile collaboration, and a relentless drive to simplify complex concepts for users, from students to global enterprises. With a Master's in Advanced Computer Science from the University of Hull and certifications like AWS Certified Cloud Practitioner (in progress), I'm a fast learner eager to tackle new challenges. I've contributed to education platforms, event-style websites, and customer conversation tools, always prioritizing performance, accessibility, and teamwork. Explore my projects to see how I blend technical skill with a passion for making a difference—let's connect to create something impactful together.",
+    bio: "a passionate Software Engineer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, UK, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool UK. My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, and C++, Laravel/PHP and so on, paired with expertise in cloud platforms (AWS, Azure exposure), APIs, and docs-as-code practices using Git and Markdown. With a Master's in Advanced Computer Science from the University of Hull and certifications like AWS Certified Cloud Practitioner (in progress), I'm a fast learner eager to tackle new challenges. I've contributed to education platforms, event-style web applications, and customer conversation tools, always prioritizing performance, accessibility, and teamwork. Explore few of my projects .",
     skills: [
       { name: "React", category: "Frontend" },
       { name: "TypeScript", category: "Languages" },
       { name: "Next.js", category: "Frameworks" },
       { name: "Node.js", category: "Backend" },
-      { name: "GraphQL", category: "API" },
+      { name: "Laravel/PHP", category: "API" },
       { name: "UI/UX", category: "Design" },
       { name: "AWS", category: "Cloud" },
       { name: "MongoDB", category: "Database" },
       { name: "TailwindCSS", category: "Frontend" },
       { name: "Python", category: "Languages" },
-      { name: "C#", category: "Languages" },
+      { name: "C++", category: "Languages" },
       { name: "Git", category: "DevTools" },
-      { name: "Redux", category: "Frontend" },
-      { name: "Jest", category: "Testing" },
       { name: "Docker", category: "DevOps" },
       { name: "CI/CD", category: "DevOps" },
       { name: "PostgreSQL", category: "Database" },
       { name: "Figma", category: "Design" },
       { name: "RESTful APIs", category: "API" },
-      { name: "Kubernetes", category: "DevOps" },
-      { name: "Vue.js", category: "Frontend" },
-      { name: "Svelte", category: "Frontend" },
-      { name: "Firebase", category: "Backend" },
       { name: "Serverless", category: "Architecture" },
       { name: "OAuth", category: "Security" },
       { name: "JWT", category: "Security" },
@@ -582,27 +576,7 @@ const DeveloperProfile = () => {
             </div>
             
             {/* Categories */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Object.entries(skillCategories).map(([category, skills], index) => (
-                <div key={index} className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
-                  <div className="bg-blue-800 dark:bg-blue-800 py-2 px-4">
-                    <h3 className="text-md font-semibold text-white">{category}</h3>
-                  </div>
-                  <div className="p-4">
-                    <div className="flex flex-wrap gap-2">
-                      {skills.map((skill, skillIndex) => (
-                        <span 
-                          key={skillIndex}
-                          className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs"
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+          
             
             <div className="mt-12 flex justify-center">
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6 max-w-lg w-full">
