@@ -737,126 +737,132 @@ const DeveloperProfile = () => {
 
         {/* Projects Section */}
         <section className="py-16 bg-white dark:bg-gray-900" aria-labelledby="projects-heading">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
-              <Code size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" />
-              <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Featured Projects</span>
-            </h2>
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 id="projects-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
+      <Code size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" />
+      <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Featured Projects</span>
+    </h2>
 
-            {/* Projects Carousel */}
-            <div className="relative">
+    {/* Projects Carousel */}
+    <div className="relative">
+      <div 
+        className="overflow-hidden" 
+        ref={carouselRef}
+        onMouseDown={startDragging}
+        onMouseLeave={stopDragging}
+        onMouseUp={stopDragging}
+        onMouseMove={whileDragging}
+        onTouchStart={startDragging}
+        onTouchEnd={stopDragging}
+        onTouchMove={whileDragging}
+      >
+        <div 
+          className="flex transition-transform duration-500 ease-in-out"
+          style={{
+            transform: `translateX(-${currentSlide * (100 / visibleCards)}%)`,
+            width: `${(developerData.projects.length / visibleCards) * 100}%`
+          }}
+        >
+          {developerData.projects.map((project, index) => (
+            <div 
+              key={index} 
+              className="px-2"
+              style={{ width: `${100 / developerData.projects.length * visibleCards}%` }}
+            >
               <div 
-                className="overflow-hidden" 
-                ref={carouselRef}
-                onMouseDown={startDragging}
-                onMouseLeave={stopDragging}
-                onMouseUp={stopDragging}
-                onMouseMove={whileDragging}
-                onTouchStart={startDragging}
-                onTouchEnd={stopDragging}
-                onTouchMove={whileDragging}
+                className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full"
+                tabIndex={0}
+                role="button"
+                onClick={() => setSelectedProject(project)}
+                onKeyDown={(e) => e.key === 'Enter' && setSelectedProject(project)}
+                aria-label={`View details of ${project.title} project`}
               >
-                <div 
-                  className="flex transition-transform duration-300"
-                  style={{
-                    transform: `translateX(-${currentSlide * (100 / visibleCards)}%)`,
-                    width: `${(developerData.projects.length / visibleCards) * 100}%`
-                  }}
-                >
-                  {developerData.projects.map((project, index) => (
-                    <div 
-                      key={index} 
-                      className="px-2"
-                      style={{ width: `${100 / developerData.projects.length * visibleCards}%` }}
-                    >
-                      <div 
-                        className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow h-full"
-                        tabIndex={0}
-                        role="button"
-                        onClick={() => setSelectedProject(project)}
-                        onKeyDown={(e) => e.key === 'Enter' && setSelectedProject(project)}
-                        aria-label={`View details of ${project.title} project`}
-                      >
-                        <div className="relative aspect-video">
-                          <img 
-                            src={project.thumbnail} 
-                            alt={`${project.title} thumbnail`} 
-                            className="w-full h-full object-cover"
-                            loading="lazy"
-                          />
-                          <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
-                            <div className="p-2 bg-blue-800 rounded-full">
-                              <Eye size={20} className="text-white" />
-                            </div>
-                          </div>
-                        </div>
-                        <div className="p-5">
-                          <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-400">{project.title}</h3>
-                          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
-                            {project.description.length > 100 
-                              ? project.description.substring(0, 100) + '...' 
-                              : project.description}
-                          </p>
-                          <div className="flex flex-wrap gap-1 mb-3">
-                            {project.tech.slice(0, 3).map((tech, techIndex) => (
-                              <span 
-                                key={techIndex} 
-                                className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs"
-                              >
-                                {tech}
-                              </span>
-                            ))}
-                            {project.tech.length > 3 && (
-                              <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs">
-                                +{project.tech.length - 3} more
-                              </span>
-                            )}
-                          </div>
-                          <button 
-                            className="mt-2 text-sm font-medium text-blue-800 dark:text-blue-400 flex items-center"
-                          >
-                            View Project Details <ExternalLink size={14} className="ml-1" />
-                          </button>
-                        </div>
-                      </div>
+                <div className="relative aspect-video">
+                  <img 
+                    src={project.thumbnail} 
+                    alt={`${project.title} thumbnail`} 
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity">
+                    <div className="p-2 bg-blue-800 rounded-full">
+                      <Eye size={20} className="text-white" />
                     </div>
-                  ))}
+                  </div>
+                </div>
+                <div className="p-5">
+                  <h3 className="text-lg font-bold mb-2 text-blue-800 dark:text-blue-400">{project.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+                    {project.description.length > 100 
+                      ? project.description.substring(0, 100) + '...' 
+                      : project.description}
+                  </p>
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {project.tech.slice(0, 3).map((tech, techIndex) => (
+                      <span 
+                        key={techIndex} 
+                        className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                    {project.tech.length > 3 && (
+                      <span className="px-2 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-md text-xs">
+                        +{project.tech.length - 3} more
+                      </span>
+                    )}
+                  </div>
+                  <button 
+                    className="mt-2 text-sm font-medium text-blue-800 dark:text-blue-400 flex items-center"
+                  >
+                    View Project Details <ExternalLink size={14} className="ml-1" />
+                  </button>
                 </div>
               </div>
-
-              {/* Navigation Arrows */}
-              <button 
-                onClick={prevSlide}
-                className="absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800"
-                aria-label="Previous project"
-              >
-                <ChevronLeft size={24} className="text-blue-800 dark:text-blue-400" />
-              </button>
-              <button 
-                onClick={nextSlide}
-                className="absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800"
-                aria-label="Next project"
-              >
-                <ChevronRight size={24} className="text-blue-800 dark:text-blue-400" />
-              </button>
-
-              {/* Pagination Dots */}
-              <div className="flex justify-center mt-6 space-x-2">
-                {Array.from({ length: developerData.projects.length - visibleCards + 1 }).map((_, i) => (
-                  <button
-                    key={i}
-                    className={`w-2.5 h-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800 ${
-                      currentSlide === i ? 'bg-blue-800 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-700'
-                    }`}
-                    onClick={() => scrollToSlide(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    aria-current={currentSlide === i ? 'true' : 'false'}
-                  />
-                ))}
-              </div>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
+      </div>
+
+      {/* Navigation Arrows */}
+      <button 
+        onClick={prevSlide}
+        disabled={currentSlide === 0}
+        className={`absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800 ${
+          currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'
+        }`}
+        aria-label="Previous project"
+      >
+        <ChevronLeft size={24} className="text-blue-800 dark:text-blue-400" />
+      </button>
+      <button 
+        onClick={nextSlide}
+        disabled={currentSlide >= developerData.projects.length - visibleCards}
+        className={`absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800 ${
+          currentSlide >= developerData.projects.length - visibleCards ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'
+        }`}
+        aria-label="Next project"
+      >
+        <ChevronRight size={24} className="text-blue-800 dark:text-blue-400" />
+      </button>
+
+      {/* Pagination Dots */}
+      <div className="flex justify-center mt-6 space-x-2">
+        {Array.from({ length: developerData.projects.length - visibleCards + 1 }).map((_, i) => (
+          <button
+            key={i}
+            className={`w-2.5 h-2.5 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800 ${
+              currentSlide === i ? 'bg-blue-800 dark:bg-blue-400' : 'bg-gray-300 dark:bg-gray-700'
+            }`}
+            onClick={() => scrollToSlide(i)}
+            aria-label={`Go to slide ${i + 1}`}
+            aria-current={currentSlide === i ? 'true' : 'false'}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
 
 
     
