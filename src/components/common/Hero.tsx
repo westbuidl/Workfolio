@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
-import { Code, Github, Linkedin, Mail, ExternalLink, X, Eye, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Code, Github, Linkedin, Mail, ExternalLink, X, Eye, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -137,6 +137,64 @@ const DeveloperProfile = () => {
   const [visibleCards, setVisibleCards] = useState(1);
   //const [autoScrollInterval, setAutoScrollInterval] = useState<NodeJS.Timeout | null>(null);
 
+
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  
+  // Add this handler function inside the DeveloperProfile component
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    
+    try {
+      // Send data to our API endpoint
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to send message');
+      }
+      
+      // Clear form after successful submission
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+      
+      // Show success modal
+      setShowSuccessModal(true);
+    } catch (error) {
+      console.error('Error sending email:', error);
+      setErrorMessage(error instanceof Error ? error.message : 'Failed to send message. Please try again later.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+
   // Check system preference for dark mode on initial load and set up listeners
   useEffect(() => {
     // Check if we're in the browser environment
@@ -180,6 +238,71 @@ const DeveloperProfile = () => {
       document.documentElement.classList.add('dark');
     }
   };
+
+
+  interface SuccessModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    message: string;
+  }
+  
+  // Add this component above the DeveloperProfile component
+  const SuccessModal: React.FC<SuccessModalProps> = ({ isOpen, onClose, message }) => {
+    if (!isOpen) return null;
+  
+    // Close on ESC key
+    useEffect(() => {
+      const handleEscape = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') onClose();
+      };
+  
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }, [onClose]);
+  
+    // Auto close after 5 seconds
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        onClose();
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }, [onClose]);
+  
+    return (
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm"
+        onClick={onClose}
+        role="dialog"
+        aria-modal="true"
+      >
+        <div 
+          className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full"
+          onClick={e => e.stopPropagation()}
+        >
+          <div className="p-6">
+            <div className="flex items-center justify-center mb-4">
+              <div className="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                <Check size={32} className="text-green-600 dark:text-green-400" />
+              </div>
+            </div>
+            <h3 className="text-xl font-bold text-center mb-2">Success!</h3>
+            <p className="text-gray-700 dark:text-gray-300 text-center mb-4">{message}</p>
+            <div className="flex justify-center">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-800"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+
 
   // Start auto-scroll for projects carousel
   useEffect(() => {
@@ -735,94 +858,131 @@ const DeveloperProfile = () => {
           </div>
         </section>
 
+
+    
+
         {/* Contact Section */}
         <section className="py-16 bg-blue-50 dark:bg-blue-950" aria-labelledby="contact-heading">
-          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="contact-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
-              <Mail size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" />
-              <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Get In Touch</span>
-            </h2>
-            
-            <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
-              <form className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="Your name"
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      placeholder="Your email address"
-                      className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject of your message"
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows={5}
-                    placeholder="Your message"
-                    className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
-                    required
-                  />
-                </div>
-                <div>
-                  <button
-                    type="submit"
-                    className="w-full bg-blue-800 hover:bg-blue-900 text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2 dark:focus:ring-offset-gray-900"
-                  >
-                    Send Message
-                  </button>
-                </div>
-              </form>
-            </div>
-            
-            <div className="mt-12 text-center">
-              <p className="text-gray-600 dark:text-gray-300 mb-4">Or connect with me directly:</p>
-              <div className="flex justify-center space-x-6">
-                {[
-                  { icon: Github, link: developerData.social.github, label: "GitHub Profile" },
-                  { icon: Linkedin, link: developerData.social.linkedin, label: "LinkedIn Profile" },
-                  { icon: Mail, link: `mailto:${developerData.social.email}`, label: "Email Contact" }
-                ].map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.link}
-                    aria-label={social.label}
-                    className="text-gray-600 hover:text-blue-800 dark:text-gray-300 dark:hover:text-blue-400 transition-colors p-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800"
-                  >
-                    <social.icon size={24} />
-                  </a>
-                ))}
-              </div>
-            </div>
+  <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 id="contact-heading" className="text-2xl sm:text-3xl font-bold mb-12 text-center flex items-center justify-center gap-2">
+      <Mail size={24} className="text-blue-800 dark:text-blue-400" aria-hidden="true" />
+      <span className="bg-gradient-to-r from-blue-800 to-blue-600 bg-clip-text text-transparent">Get In Touch</span>
+    </h2>
+    
+    <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-6">
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Your name"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+              required
+              disabled={isSubmitting}
+            />
           </div>
-        </section>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="Your email address"
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+        </div>
+        <div>
+          <label htmlFor="subject" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            value={formData.subject}
+            onChange={handleInputChange}
+            placeholder="Subject of your message"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+            required
+            disabled={isSubmitting}
+          />
+        </div>
+        <div>
+          <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label>
+          <textarea
+            id="message"
+            name="message"
+            value={formData.message}
+            onChange={handleInputChange}
+            rows={5}
+            placeholder="Your message"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-800"
+            required
+            disabled={isSubmitting}
+          />
+        </div>
+        {errorMessage && (
+          <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-300 px-4 py-3 rounded-md">
+            {errorMessage}
+          </div>
+        )}
+        <div>
+          <button
+            type="submit"
+            className={`w-full ${isSubmitting ? 'bg-blue-600' : 'bg-blue-800 hover:bg-blue-900'} text-white font-medium py-3 px-4 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-800 focus:ring-offset-2 dark:focus:ring-offset-gray-900 flex items-center justify-center`}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Sending...
+              </>
+            ) : (
+              'Send Message'
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <div className="mt-12 text-center">
+      <p className="text-gray-600 dark:text-gray-300 mb-4">Or connect with me directly:</p>
+      <div className="flex justify-center space-x-6">
+        {[
+          { icon: Github, link: developerData.social.github, label: "GitHub Profile" },
+          { icon: Linkedin, link: developerData.social.linkedin, label: "LinkedIn Profile" },
+          { icon: Mail, link: `mailto:${developerData.social.email}`, label: "Email Contact" }
+        ].map((social, index) => (
+          <a
+            key={index}
+            href={social.link}
+            aria-label={social.label}
+            className="text-gray-600 hover:text-blue-800 dark:text-gray-300 dark:hover:text-blue-400 transition-colors p-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800"
+          >
+            <social.icon size={24} />
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+
+<SuccessModal 
+  isOpen={showSuccessModal}
+  onClose={() => setShowSuccessModal(false)}
+  message="Your message has been sent successfully! I'll get back to you as soon as possible."
+/>
 
         {/* Footer */}
         <footer className="bg-white dark:bg-gray-900 shadow-inner py-8">
