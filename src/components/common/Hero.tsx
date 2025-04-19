@@ -132,6 +132,10 @@ const DeveloperProfile = () => {
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [autoScrollInterval, setAutoScrollInterval] = useState<NodeJS.Timeout | null>(null);
+  //const [isDragging, setIsDragging] = useState(false);
+const [dragStartX, setDragStartX] = useState(0);
+const [dragDistance, setDragDistance] = useState(0);
+//const carouselRef = useRef(null);
 
   // Initialize visibleCards before using it in useEffect
   const [visibleCards, setVisibleCards] = useState(1);
@@ -413,7 +417,7 @@ const DeveloperProfile = () => {
   const developerData = {
     name: "Hyacinth Afam",
     title: "Software Engineer",
-    bio: "a passionate Software Engineer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, UK, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool UK. My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, and C++, Laravel/PHP and so on, paired with expertise in cloud platforms (AWS, Azure exposure), APIs, and docs-as-code practices using Git and Markdown. With a Master's in Advanced Computer Science from the University of Hull and certifications like AWS Certified Cloud Practitioner (in progress), I'm a fast learner eager to tackle new challenges. I've contributed to education platforms, event-style web applications, and customer conversation tools, always prioritizing performance, accessibility, and teamwork. Explore few of my projects .",
+    bio: "a passionate Software Engineer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, United Kingdom, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool United Kingdom.  My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, C++ and Laravel/PHP paired with expertise in AWS, Azure and GCP, APIs and docs-as-code practices using Git and Markdown. With a Master's in Advanced Computer Science from the University of Hull and certifications like AWS Certified Cloud Practitioner (in progress), I am a fast learner eager to tackle new challenges. I have contributed to education platforms, event-style web applications, and customer conversation tools, always prioritizing performance, accessibility, and teamwork.  Explore few of my projects below.",
     skills: [
       { name: "React", category: "Frontend" },
       { name: "TypeScript", category: "Languages" },
@@ -464,7 +468,7 @@ const DeveloperProfile = () => {
       },
       {
         title: "CinthPay",
-        description: "CinthPay is a trusted payment platform built to simplify remittances from the UK to Nigeria. Founded with a mission to empower the Nigerian diaspora, we provide a fast, secure, and affordable way to send money home. Whether it's supporting family, paying bills, or celebrating life's milestones, CinthPay bridges the gap between you and your loved ones in Nigeria.",
+        description: "CinthPay is a trusted payment platform built to simplify remittances from the United Kingdom to Nigeria. Founded with a mission to empower the Nigerian diaspora, we provide a fast, secure, and affordable way to send money home. Whether it's supporting family, paying bills, or celebrating life's milestones, CinthPay bridges the gap between you and your loved ones in Nigeria.",
         tech: ["Javascript", "Next.js", "Node.js", "Prisma"],
         link: "https://cinthpay.money",
         thumbnail: "/images/background/cinthpay1.png",
@@ -640,7 +644,7 @@ const DeveloperProfile = () => {
                 <p className="text-xl sm:text-2xl text-blue-800 dark:text-blue-400 mb-4 font-medium">{developerData.title}</p>
                 <div className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl bio-container relative">
                   <p className="leading-relaxed whitespace-pre-line">
-                    I'm {showFullBio ? formattedBio : shortBio}
+                    I am {showFullBio ? formattedBio : shortBio}
                   </p>
                   {formattedBio.length > 150 && (
                     <button
