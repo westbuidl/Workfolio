@@ -417,7 +417,7 @@ const [dragDistance, setDragDistance] = useState(0);
   const developerData = {
     name: "Hyacinth Afam",
     title: "Software Engineer",
-    bio: "a passionate Software Engineer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, United Kingdom, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool United Kingdom.  My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, C++ and Laravel/PHP paired with expertise in AWS, Azure and GCP, APIs and docs-as-code practices using Git and Markdown. With a Master's in Advanced Computer Science from the University of Hull and certifications like AWS Certified Cloud Practitioner (in progress), I am a fast learner eager to tackle new challenges. I have contributed to education platforms, event-style web applications, and customer conversation tools, always prioritizing performance, accessibility, and teamwork.  Explore few of my projects below.",
+    bio: "a passionate Software Engineer and technical communicator with a strong foundation in crafting user-focused, high-performance software solutions. Based in London, United Kingdom, I bring over three years of hands-on experience in web development, technical documentation, and SaaS delivery, honed through roles at Agroease Limited, Smart Audits, and Logiscool United Kingdom.  My technical toolkit includes JavaScript, React, Node.js, TypeScript, HTML, CSS, Python, C++ and Laravel/PHP paired with expertise in AWS, Azure, GCP, APIs and docs-as-code practices using Git and Markdown. With a Master's in Advanced Computer Science from the University of Hull, I build dependable software products. Explore few of my projects below.",
     skills: [
       { name: "React", category: "Frontend" },
       { name: "TypeScript", category: "Languages" },
@@ -723,7 +723,7 @@ const [dragDistance, setDragDistance] = useState(0);
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
       </svg>
     </div>
-    <span>AWS Certified Cloud Practitioner (in progress)</span>
+    <span>AWS Associated Cloud Engineer</span>
   </li>
   <li className="flex items-center">
     <div className="bg-blue-100 dark:bg-blue-900/30 rounded-full p-1 mr-3">
@@ -731,7 +731,7 @@ const [dragDistance, setDragDistance] = useState(0);
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
       </svg>
     </div>
-    <span>Full Stack Web Development - Self-taught & Professional Experience</span>
+    <span>Full Stack Web Development - Professional Experience</span>
   </li>
 </ul>
               </div>
