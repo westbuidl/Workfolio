@@ -451,10 +451,10 @@ const [dragDistance, setDragDistance] = useState(0);
     },
     projects: [
       {
-        title: "Url Shortener ",
+        title: "Wisk ",
         description: "A simple URL shortening service built with Laravel that converts long URLs into short, manageable links.",
         tech: ["PHP", "Blade", "CSS", "JavaScript"],
-        link: "https://github.com/westbuidl/urlShortener.git",
+        link: "https://wisk.in",
         thumbnail: "/images/background/urlshort.png",
         fullImage: "/images/background/urlshort.png"
       },
@@ -830,25 +830,24 @@ const [dragDistance, setDragDistance] = useState(0);
 
       {/* Navigation Arrows */}
       <button 
-        onClick={prevSlide}
-        disabled={currentSlide === 0}
-        className={`absolute top-1/2 left-0 transform -translate-y-1/2 -translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800 ${
-          currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'
-        }`}
-        aria-label="Previous project"
-      >
-        <ChevronLeft size={24} className="text-blue-800 dark:text-blue-400" />
-      </button>
-      <button 
-        onClick={nextSlide}
-        disabled={currentSlide >= developerData.projects.length - visibleCards}
-        className={`absolute top-1/2 right-0 transform -translate-y-1/2 translate-x-1/2 bg-white dark:bg-gray-800 p-2 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800 ${
-          currentSlide >= developerData.projects.length - visibleCards ? 'opacity-50 cursor-not-allowed' : 'opacity-100 cursor-pointer'
-        }`}
-        aria-label="Next project"
-      >
-        <ChevronRight size={24} className="text-blue-800 dark:text-blue-400" />
-      </button>
+    onClick={prevSlide}
+    disabled={currentSlide === 0}
+    className={`absolute top-1/2 left-2 transform -translate-y-1/2 bg-white dark:bg-gray-800 p-3 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800 
+      ${currentSlide === 0 ? 'opacity-50 cursor-not-allowed' : 'opacity-90 hover:opacity-100 cursor-pointer'}`}
+    aria-label="Previous project"
+  >
+    <ChevronLeft size={24} className="text-blue-800 dark:text-blue-400" />
+  </button>
+  
+  <button 
+    onClick={nextSlide}
+    disabled={currentSlide >= developerData.projects.length - visibleCards}
+    className={`absolute top-1/2 right-2 transform -translate-y-1/2 bg-white dark:bg-gray-800 p-3 rounded-full shadow-md z-10 focus:outline-none focus:ring-2 focus:ring-blue-800
+      ${currentSlide >= developerData.projects.length - visibleCards ? 'opacity-50 cursor-not-allowed' : 'opacity-90 hover:opacity-100 cursor-pointer'}`}
+    aria-label="Next project"
+  >
+    <ChevronRight size={24} className="text-blue-800 dark:text-blue-400" />
+  </button>
 
       {/* Pagination Dots */}
       <div className="flex justify-center mt-6 space-x-2">
